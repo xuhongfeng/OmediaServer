@@ -1,5 +1,9 @@
 package org.tsinghua.omedia.dao;
 
-public interface DAO {
+import java.io.IOException;
+import java.sql.Connection;
 
+public interface DAO {
+    Connection openConnection() throws IOException ;
+    void closeConnection(Connection conn);
 }

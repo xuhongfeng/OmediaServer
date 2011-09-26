@@ -1,13 +1,11 @@
 package org.tsinghua.omedia.dao;
 
+import org.tsinghua.omedia.exception.DbException;
 import org.tsinghua.omedia.model.Account;
 
 public interface AccountDAO extends DAO {
-    public static final String TABLE_NAME = "account";
-    public static final String COL_ID = "id";
-    public static final String COL_USER_NAME = "username";
-    public static final String COL_PASSWORD = "password";
-    public static final String COL_EMAIL = "email";
-    
-    public Account getAccountByUsername(String username);
+    public Account getAccount(String username) throws DbException;
+    public Account getAccount(String username, String password) throws DbException;
+
+    public void addAccount(Account account) throws DbException;
 }

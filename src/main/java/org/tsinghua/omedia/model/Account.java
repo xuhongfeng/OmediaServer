@@ -5,6 +5,12 @@ public class Account implements Model {
     private String username;
     private String password;
     private String email;
+    
+    @Override
+    public String toString() {
+        return "Account [id=" + id + ", username=" + username + ", password="
+                + password + ", email=" + email + "]";
+    }
     public long getId() {
         return id;
     }
