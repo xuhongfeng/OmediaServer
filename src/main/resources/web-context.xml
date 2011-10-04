@@ -14,4 +14,6 @@
         location="classpath:db.properties" />
     <context:annotation-config />
 
+    <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper"></bean>
+
 </beans>

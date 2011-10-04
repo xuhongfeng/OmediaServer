@@ -3,6 +3,7 @@ package org.tsinghua.omedia.controller;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,9 @@ public class OmediaClientController{
     @Autowired
     private AccountService accountService;
     
+    @Autowired
+    private ObjectMapper objectMapper;
+    
     @RequestMapping(value="/register.do", method=RequestMethod.GET)
     @ResponseBody
     public String register(@RequestParam("username") String username
@@ -27,13 +31,13 @@ public class OmediaClientController{
         logger.debug("register username="+username + ",password="+password + ",email=" + email);
         try {
             if(accountService.isAccountExist(username)) {
-                return "{result:2}";
+                return "{\"result\":2}";
             }
             accountService.addAccount(username, password, email);
-            return "{result:1}";
+            return "{\"result\":1}";
         } catch (IOException e) {
             logger.error("register failed! username="+username+",email="+email+",password="+password, e);
-            return "{result:-1}";
+            return "{\"result\":-1}";
         }
     }
 
@@ -45,13 +49,48 @@ public class OmediaClientController{
         try {
             Account account = accountService.login(username, password);
             if(account == null) {
-                return "{result:2}";
+                return "{\"result\":2}";
             }
-            return "{result:1}";
+            //generate token
+            accountService.generateToken(account);
+            JsonLoginSuccess json = new JsonLoginSuccess(account);
+            return objectMapper.writeValueAsString(json);
         } catch (IOException e) {
             logger.error("login failed! username="+username+",password="+password, e);
-            return "{result:-1}";
+            return "{\"result\":-1}";
         }
     }
-    
+
+    private static class JsonLoginSuccess {
+        private int result;
+        private long accountId;
+        private long token;
+        
+        public JsonLoginSuccess(Account account) {
+            setAccountId(account.getAccountId());
+            setResult(1);
+            setToken(account.getToken());
+        }
+        
+        public int getResult() {
+            return result;
+        }
+        public void setResult(int result) {
+            this.result = result;
+        }
+
+
+        public long getAccountId() {
+            return accountId;
+        }
+        public void setAccountId(long accountId) {
+            this.accountId = accountId;
+        }
+        public long getToken() {
+            return token;
+        }
+        public void setToken(long token) {
+            this.token = token;
+        }
+    }
 }

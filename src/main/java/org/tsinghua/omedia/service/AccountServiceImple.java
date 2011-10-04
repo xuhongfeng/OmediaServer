@@ -39,4 +39,10 @@ public class AccountServiceImple implements AccountService {
         account = accountDao.getAccount(account.getUsername(), account.getPassword());
         return account;
     }
+
+    public void generateToken(Account account) throws IOException {
+        accountUtil.generateToken(account);
+        accountDao.addAccount(account);
+    }
+    
 }

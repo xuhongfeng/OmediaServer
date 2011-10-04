@@ -4,3 +4,4 @@
 /target/
 /src/test/java/org/tsinghua/omedia/lab/
 *.log
+/test-output/

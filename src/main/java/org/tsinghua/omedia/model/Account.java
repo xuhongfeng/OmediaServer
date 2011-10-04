@@ -1,21 +1,58 @@
 package org.tsinghua.omedia.model;
 
 public class Account implements Model {
-    private long id;
-    private String username;
-    private String password;
-    private String email;
+    private long accountId = 0;
+    private String username = "";
+    private String password = "";
+    private String email = "";
+    private String address = "";
+    private String phone = "";
+    private String realName = "";
+    private long token = 0;
+    private long version = 0;
     
     @Override
     public String toString() {
-        return "Account [id=" + id + ", username=" + username + ", password="
-                + password + ", email=" + email + "]";
+        return "Account [accountId=" + accountId + ", username=" + username
+                + ", password=" + password + ", email=" + email + ", address="
+                + address + ", phone=" + phone + ", realName=" + realName
+                + ", token=" + token + ", version=" + version + "]";
     }
-    public long getId() {
-        return id;
+    public String getAddress() {
+        return address;
     }
-    public void setId(long id) {
-        this.id = id;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+    public String getPhone() {
+        return phone;
+    }
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    public String getRealName() {
+        return realName;
+    }
+    public void setRealName(String realName) {
+        this.realName = realName;
+    }
+    public long getToken() {
+        return token;
+    }
+    public void setToken(long token) {
+        this.token = token;
+    }
+    public long getVersion() {
+        return version;
+    }
+    public void setVersion(long version) {
+        this.version = version;
+    }
+    public long getAccountId() {
+        return accountId;
+    }
+    public void setAccountId(long id) {
+        this.accountId = id;
     }
     public String getUsername() {
         return username;

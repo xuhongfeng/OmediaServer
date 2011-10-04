@@ -28,7 +28,8 @@ public class AbstractDAO implements DAO {
         try {
             return DriverManager.getConnection(url, user, password);
         } catch (SQLException e) {
-            throw new IOException("open mysql connection failed!", e);
+            throw new IOException("open mysql connection failed!\nurl="+url
+                    +",username="+user+",password="+password, e);
         }
     }
     
