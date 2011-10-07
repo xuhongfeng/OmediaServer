@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 
-public class AbstractDAO implements DAO {
-    private static final Logger logger = Logger.getLogger(AbstractDAO.class);
+public class BaseDao {
+    private static final Logger logger = Logger.getLogger(BaseDao.class);
     @Value("${mysql.url}")
     private String url;
     @Value("${mysql.user}")

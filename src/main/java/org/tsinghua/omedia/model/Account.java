@@ -12,6 +12,71 @@ public class Account implements Model {
     private long version = 0;
     
     @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (int) (accountId ^ (accountId >>> 32));
+        result = prime * result + ((address == null) ? 0 : address.hashCode());
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result
+                + ((password == null) ? 0 : password.hashCode());
+        result = prime * result + ((phone == null) ? 0 : phone.hashCode());
+        result = prime * result
+                + ((realName == null) ? 0 : realName.hashCode());
+        result = prime * result + (int) (token ^ (token >>> 32));
+        result = prime * result
+                + ((username == null) ? 0 : username.hashCode());
+        result = prime * result + (int) (version ^ (version >>> 32));
+        return result;
+    }
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Account other = (Account) obj;
+        if (accountId != other.accountId)
+            return false;
+        if (address == null) {
+            if (other.address != null)
+                return false;
+        } else if (!address.equals(other.address))
+            return false;
+        if (email == null) {
+            if (other.email != null)
+                return false;
+        } else if (!email.equals(other.email))
+            return false;
+        if (password == null) {
+            if (other.password != null)
+                return false;
+        } else if (!password.equals(other.password))
+            return false;
+        if (phone == null) {
+            if (other.phone != null)
+                return false;
+        } else if (!phone.equals(other.phone))
+            return false;
+        if (realName == null) {
+            if (other.realName != null)
+                return false;
+        } else if (!realName.equals(other.realName))
+            return false;
+        if (token != other.token)
+            return false;
+        if (username == null) {
+            if (other.username != null)
+                return false;
+        } else if (!username.equals(other.username))
+            return false;
+        if (version != other.version)
+            return false;
+        return true;
+    }
+    @Override
     public String toString() {
         return "Account [accountId=" + accountId + ", username=" + username
                 + ", password=" + password + ", email=" + email + ", address="

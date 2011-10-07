@@ -14,16 +14,16 @@ public class AccountUtil {
     
     private Random random = new Random();
     
-    public void generatedPassword(Account account) throws IOException {
-        account.setPassword(md5Util.md5(account.getPassword()));
+    public String encryptPassword(String password) throws IOException {
+        return md5Util.md5(password);
     }
     
     public void generateId(Account account) {
         account.setAccountId(genId());
     }
     
-    public void generateToken(Account account) {
-        account.setToken(account.getToken() + random.nextLong());
+    public long generateToken() {
+        return random.nextInt();
     }
     
     private synchronized long genId () {

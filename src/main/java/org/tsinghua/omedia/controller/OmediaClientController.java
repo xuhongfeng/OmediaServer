@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.service.AccountService;
+import org.tsinghua.omedia.utils.AccountUtil;
 
 @Controller
 public class OmediaClientController{
@@ -22,6 +23,8 @@ public class OmediaClientController{
     
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private AccountUtil accountUtil;
     
     @RequestMapping(value="/register.do", method=RequestMethod.GET)
     @ResponseBody
@@ -30,10 +33,10 @@ public class OmediaClientController{
             ,@RequestParam("email") String email) {
         logger.debug("register username="+username + ",password="+password + ",email=" + email);
         try {
-            if(accountService.isAccountExist(username)) {
+            if(accountService.isUsernameExist(username)) {
                 return "{\"result\":2}";
             }
-            accountService.addAccount(username, password, email);
+            accountService.createAccount(username, password, email);
             return "{\"result\":1}";
         } catch (IOException e) {
             logger.error("register failed! username="+username+",email="+email+",password="+password, e);
@@ -51,12 +54,53 @@ public class OmediaClientController{
             if(account == null) {
                 return "{\"result\":2}";
             }
-            //generate token
-            accountService.generateToken(account);
+            //update token
+            long token = accountService.updateToken(account.getAccountId());
+            account.setToken(token);
             JsonLoginSuccess json = new JsonLoginSuccess(account);
             return objectMapper.writeValueAsString(json);
         } catch (IOException e) {
             logger.error("login failed! username="+username+",password="+password, e);
+            return "{\"result\":-1}";
+        }
+    }
+    
+    @RequestMapping(value="/setting.do", method=RequestMethod.GET)
+    @ResponseBody
+    public String setting(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token,
+            @RequestParam("oldPassword") String oldPassword,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("email") String email,
+            @RequestParam("realName") String realName,
+            @RequestParam("phone") String phone,
+            @RequestParam("address") String address) {
+        logger.debug("setting accountId="+accountId+",token="+token);
+        try {
+            Account account = new Account();
+            account.setAccountId(accountId);
+            account.setAddress(new String(address.getBytes("ISO8859_1"),"utf8"));
+            account.setEmail(email);
+            account.setPhone(new String(phone.getBytes("ISO8859_1"),"utf8"));
+            account.setRealName(new String(realName.getBytes("ISO8859_1"),"utf8"));
+            account.setToken(token);
+            Account dbAccount = accountService.getAccount(accountId);
+            account.setUsername(dbAccount.getUsername());
+            account.setVersion(System.currentTimeMillis());
+            account.setPassword(dbAccount.getPassword());
+            if(dbAccount==null || dbAccount.getToken()!=account.getToken()) {
+                return "{\"result\":3}";
+            }
+            if (!newPassword.equals("")) {
+                account.setPassword(accountUtil.encryptPassword(newPassword));
+                if(!dbAccount.getPassword().equals(accountUtil.encryptPassword(oldPassword))) {
+                    return "{\"result\":2}";
+                }
+            }
+            accountService.updateAccount(account);
+            return "{\"result\":1, \"version\":"+account.getVersion()+"}";
+        } catch (Exception e) {
+            logger.error("setting failed", e);
             return "{\"result\":-1}";
         }
     }
@@ -71,21 +115,22 @@ public class OmediaClientController{
             setResult(1);
             setToken(account.getToken());
         }
-        
+
+        @SuppressWarnings("unused")
         public int getResult() {
             return result;
         }
         public void setResult(int result) {
             this.result = result;
         }
-
-
+        @SuppressWarnings("unused")
         public long getAccountId() {
             return accountId;
         }
         public void setAccountId(long accountId) {
             this.accountId = accountId;
         }
+        @SuppressWarnings("unused")
         public long getToken() {
             return token;
         }
