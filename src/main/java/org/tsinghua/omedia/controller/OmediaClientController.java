@@ -1,6 +1,7 @@
 package org.tsinghua.omedia.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -104,7 +105,70 @@ public class OmediaClientController{
             return "{\"result\":-1}";
         }
     }
+    @RequestMapping(value="/checkDataVersion.do", method=RequestMethod.GET)
+    @ResponseBody
+    public String checkDataVersion(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token,
+            @RequestParam("accountVersion") long accountVersion) {
+        Account account;
+        try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+                return "{\"result\":3}";
+            }
+            JsonCheckDataVersion json = new JsonCheckDataVersion();
+            json.setResult(1);
+            if(account.getVersion() == accountVersion) {
+                json.setAccount(0);
+            } else {
+                json.setAccount(1);
+            }
+            return objectMapper.writeValueAsString(json);
+        } catch (Exception e) {
+            logger.error("check data version failed", e);
+            return "{\"result\":-1}";
+        }
+    }
+    @RequestMapping(value="/getAccount.do", method=RequestMethod.GET)
+    @ResponseBody
+    public String getAccount(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token) {
+        Account account;
+        try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+                return "{\"result\":3}";
+            }
+            return objectMapper.writeValueAsString(new AccountJson(account));
+        } catch (Exception e) {
+            logger.error("get account failed", e);
+            return "{\"result\":-1}";
+        }
+    }
 
+    private static class JsonCheckDataVersion {
+        private int account;//==1 means accountData need to update
+        private int result;
+
+        @SuppressWarnings("unused")
+        public int getResult() {
+            return result;
+        }
+
+        public void setResult(int result) {
+            this.result = result;
+        }
+
+        @SuppressWarnings("unused")
+        public int getAccount() {
+            return account;
+        }
+
+        public void setAccount(int account) {
+            this.account = account;
+        }
+    }
+    
     private static class JsonLoginSuccess {
         private int result;
         private long accountId;
@@ -137,5 +201,73 @@ public class OmediaClientController{
         public void setToken(long token) {
             this.token = token;
         }
+    }
+    
+    @SuppressWarnings("unused")
+    private static class AccountJson {
+        private int result = 1;
+        private String email;
+        private String realName;
+        private String address;
+        private String phone;
+        private long version;
+        
+        public AccountJson(Account account) throws UnsupportedEncodingException {
+            this.email = account.getEmail();
+            this.realName = new String(account.getRealName().getBytes("utf8"),"ISO8859_1");
+            this.address = new String(account.getAddress().getBytes("utf8"),"ISO8859_1");
+            this.phone = new String(account.getPhone().getBytes("utf8"),"ISO8859_1");
+            this.version = account.getVersion();
+        }
+
+        public int getResult() {
+            return result;
+        }
+
+        public void setResult(int result) {
+            this.result = result;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getRealName() {
+            return realName;
+        }
+
+        public void setRealName(String realName) {
+            this.realName = realName;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
+
+        public long getVersion() {
+            return version;
+        }
+
+        public void setVersion(long version) {
+            this.version = version;
+        }
+        
+        
     }
 }
