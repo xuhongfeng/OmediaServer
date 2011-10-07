@@ -19,6 +19,8 @@ import org.tsinghua.omedia.utils.AccountUtil;
 public class OmediaClientController{
     private static final Logger logger = Logger.getLogger(OmediaClientController.class);
 
+    private static final String Version = "0.1.1";
+    
     @Autowired
     private AccountService accountService;
     
@@ -31,9 +33,13 @@ public class OmediaClientController{
     @ResponseBody
     public String register(@RequestParam("username") String username
             ,@RequestParam("password") String password
-            ,@RequestParam("email") String email) {
+            ,@RequestParam("email") String email
+            ,@RequestParam("omediaVersion") String omediaVersion) {
         logger.debug("register username="+username + ",password="+password + ",email=" + email);
         try {
+            if(!omediaVersion.equals(Version)) {
+                return "{\"result\":4}";
+            }
             if(accountService.isUsernameExist(username)) {
                 return "{\"result\":2}";
             }
@@ -48,9 +54,13 @@ public class OmediaClientController{
     @RequestMapping(value="/login.do", method=RequestMethod.GET)
     @ResponseBody
     public String login(@RequestParam("username") String username
-            ,@RequestParam("password") String password) {
+            ,@RequestParam("password") String password
+            ,@RequestParam("omediaVersion") String omediaVersion) {
         logger.debug("login username="+username + ",password="+password );
         try {
+            if(!omediaVersion.equals(Version)) {
+                return "{\"result\":4}";
+            }
             Account account = accountService.login(username, password);
             if(account == null) {
                 return "{\"result\":2}";
