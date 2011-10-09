@@ -3,6 +3,8 @@ package org.tsinghua.omedia.dao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -170,6 +172,67 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
         } catch (Exception e) {
             throw new DbException("update account token failed! accountId="
                     + accountId, e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
+
+    public List<Account> searchAccounts(String keyword) throws DbException {
+        List<Account> ret = new ArrayList<Account>();
+        //以whitespace split String, 结果可能含whitespace
+        String[] temp  =keyword.split("\\s+");
+        List<String> words = new ArrayList<String>();
+        //取出whitespace
+        for(String e:temp) {
+            if(!e.trim().isEmpty()) {
+                words.add(e);
+            }
+        }
+        if(words.size() == 0) {
+            return ret;
+        }
+        StringBuilder sql = new StringBuilder();
+        sql.append("select accountId,username,password,email,realName,address,phone,version,token" +
+                " from account where username like ? or realName like ?");
+        for(int i=1; i<words.size(); i++) {
+            sql.append(" or username like ? or realName like ?");
+        };
+        Connection conn = null;
+        try {
+            conn = openConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql.toString());
+            for(int i=0; i<words.size(); i++) {
+                stmt.setString(2*i+1, "%"+words.get(i)+"%");
+                stmt.setString(2*i+2, "%"+words.get(i)+"%");
+            }
+            ResultSet rs = stmt.executeQuery();
+            Account account = null;
+            while(rs.next()) {
+                account = new Account();
+                long accountId = rs.getLong(1);
+                String username = rs.getString(2);
+                String password = rs.getString(3);
+                String email = rs.getString(4);
+                String realName = rs.getString(5);
+                String address = rs.getString(6);
+                String phone = rs.getString(7);
+                long version = rs.getLong(8);
+                long token = rs.getLong(9);
+                account.setEmail(email);
+                account.setAccountId(accountId);
+                account.setPassword(password);
+                account.setUsername(username);
+                account.setRealName(realName);
+                account.setAddress(address);
+                account.setPhone(phone);
+                account.setVersion(version);
+                account.setToken(token);
+                ret.add(account);
+            }
+            return ret;
+        } catch (Exception e) {
+            throw new DbException("search accounts failed,keyword="
+                    + keyword, e);
         } finally {
             closeConnection(conn);
         }

@@ -65,4 +65,10 @@ public class MockAccountDao implements AccountDAO {
         }
     }
 
+    @Override
+    public List<Account> searchAccounts(String keyword) throws DbException {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

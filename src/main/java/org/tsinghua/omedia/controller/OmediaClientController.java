@@ -2,6 +2,7 @@ package org.tsinghua.omedia.controller;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -149,7 +150,44 @@ public class OmediaClientController{
             if(account==null || account.getToken()!=token) {
                 return "{\"result\":3}";
             }
-            return objectMapper.writeValueAsString(new AccountJson(account));
+            return objectMapper.writeValueAsString(new JsonAccount(account));
+        } catch (Exception e) {
+            logger.error("get account failed", e);
+            return "{\"result\":-1}";
+        }
+    }
+    @RequestMapping(value="/getFriendsId.do", method=RequestMethod.GET)
+    @ResponseBody
+    public String getFriendsId(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token) {
+        //TODO
+        Account account;
+        try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+                return "{\"result\":3}";
+            }
+            return objectMapper.writeValueAsString(new JsonAccount(account));
+        } catch (Exception e) {
+            logger.error("get account failed", e);
+            return "{\"result\":-1}";
+        }
+    }
+    @RequestMapping(value="/searchFriends.do", method=RequestMethod.GET)
+    @ResponseBody
+    public String searchFriends(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token
+            ,@RequestParam("keyword") String keyword) {
+        Account account;
+        try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+                return "{\"result\":3}";
+            }
+            List<Account> accounts = accountService.searchAccounts(new String(
+                    keyword.getBytes("ISO8859_1"), "utf8"));
+            JsonSearchFriends json = new JsonSearchFriends(accounts);
+            return objectMapper.writeValueAsString(json);
         } catch (Exception e) {
             logger.error("get account failed", e);
             return "{\"result\":-1}";
@@ -214,7 +252,7 @@ public class OmediaClientController{
     }
     
     @SuppressWarnings("unused")
-    private static class AccountJson {
+    private static class JsonAccount {
         private int result = 1;
         private String email;
         private String realName;
@@ -222,7 +260,7 @@ public class OmediaClientController{
         private String phone;
         private long version;
         
-        public AccountJson(Account account) throws UnsupportedEncodingException {
+        public JsonAccount(Account account) throws UnsupportedEncodingException {
             this.email = account.getEmail();
             this.realName = new String(account.getRealName().getBytes("utf8"),"ISO8859_1");
             this.address = new String(account.getAddress().getBytes("utf8"),"ISO8859_1");
@@ -278,6 +316,90 @@ public class OmediaClientController{
             this.version = version;
         }
         
+    }
+    @SuppressWarnings("unused")
+    private static class JsonSearchFriends {
+        private int result;
+        private JsonFriend[] friends;
+        
+        public JsonSearchFriends(List<Account> accounts) throws UnsupportedEncodingException {
+            result = 1;
+            friends = new JsonFriend[accounts.size()];
+            for(int i=0; i<friends.length; i++) {
+                friends[i] = new JsonFriend(accounts.get(i));
+            }
+        }
+        
+        public int getResult() {
+            return result;
+        }
+        public void setResult(int result) {
+            this.result = result;
+        }
+        public JsonFriend[] getFriends() {
+            return friends;
+        }
+        public void setFriends(JsonFriend[] friends) {
+            this.friends = friends;
+        }
+        
+    }
+    
+    @SuppressWarnings("unused")
+    private static class JsonFriend {
+        private long accountId;
+        private String username;
+        private String email;
+        private String realName;
+        private String address;
+        private String phone;
+        
+        public JsonFriend(Account account) throws UnsupportedEncodingException {
+            this.accountId = account.getAccountId();
+            this.username = account.getUsername();
+            this.email = account.getEmail();
+            this.realName = new String(account.getRealName().getBytes("utf8"),"ISO8859_1");
+            this.address = new String(account.getAddress().getBytes("utf8"),"ISO8859_1");
+            this.phone = new String(account.getPhone().getBytes("utf8"),"ISO8859_1");
+        }
+        
+        
+        public String getUsername() {
+            return username;
+        }
+        public void setUsername(String username) {
+            this.username = username;
+        }
+        public long getAccountId() {
+            return accountId;
+        }
+        public void setAccountId(long accountId) {
+            this.accountId = accountId;
+        }
+        public String getEmail() {
+            return email;
+        }
+        public void setEmail(String email) {
+            this.email = email;
+        }
+        public String getRealName() {
+            return realName;
+        }
+        public void setRealName(String realName) {
+            this.realName = realName;
+        }
+        public String getAddress() {
+            return address;
+        }
+        public void setAddress(String address) {
+            this.address = address;
+        }
+        public String getPhone() {
+            return phone;
+        }
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
         
     }
 }

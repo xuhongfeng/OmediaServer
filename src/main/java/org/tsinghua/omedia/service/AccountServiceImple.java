@@ -1,6 +1,7 @@
 package org.tsinghua.omedia.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -62,5 +63,9 @@ public class AccountServiceImple implements AccountService {
 
     public void setAccountDao(AccountDAO accountDao) {
         this.accountDao = accountDao;
+    }
+
+    public List<Account> searchAccounts(String keyword) throws IOException {
+        return accountDao.searchAccounts(keyword);
     }
 }

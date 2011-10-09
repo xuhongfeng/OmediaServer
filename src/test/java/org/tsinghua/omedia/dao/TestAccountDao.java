@@ -1,5 +1,7 @@
 package org.tsinghua.omedia.dao;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,6 +27,19 @@ public class TestAccountDao extends AbstractTestNGSpringContextTests {
             logger.info(account.toString());
         } catch (DbException e) {
             logger.error("test get account failed!", e);
+            Assert.assertTrue(false);
+        }
+    }
+    
+    @Test
+    public void testSearchAccounts() {
+        try {
+            List<Account> list = accountDao.searchAccounts(" ºê x sdf");
+            for(Account e:list) {
+                logger.info(e);
+            }
+        } catch (DbException e) {
+            logger.error("test search accounts failed!", e);
             Assert.assertTrue(false);
         }
     }

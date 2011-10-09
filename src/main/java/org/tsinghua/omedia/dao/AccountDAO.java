@@ -1,5 +1,7 @@
 package org.tsinghua.omedia.dao;
 
+import java.util.List;
+
 import org.tsinghua.omedia.exception.DbException;
 import org.tsinghua.omedia.model.Account;
 
@@ -10,4 +12,5 @@ public interface AccountDAO {
 
     public void saveAccount(Account account) throws DbException;
     public void updateToken(long accountId, long token) throws DbException;
+    public List<Account> searchAccounts(String keyword) throws DbException;
 }
