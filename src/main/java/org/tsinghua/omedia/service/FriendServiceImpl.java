@@ -80,14 +80,34 @@ public class FriendServiceImpl implements FriendService {
         accountDao.updateFriendsVersion(friendId, accountId);
     }
 
-    public void addFriendRequest(long accountId, long friendId, String msg)  throws IOException {
-        if(innerIsFriend(accountId, friendId)) {
+    public void addFriendRequest(long requesterId, long friendId, String msg)  throws IOException {
+        if(innerIsFriend(requesterId, friendId)) {
+            return;
+        }
+        List<FriendRequest> friendRequests = friendDao.getFriendRequest(requesterId, friendId);
+        if(friendRequests.size() != 0) {
+            //对方已经给我发送过好友请求
+            for(FriendRequest e: friendRequests) {
+                e.setStatus(FriendRequest.STATUS_ACCEPT);
+                friendDao.saveFriendRequest(e);
+            }
+            List<FriendRequest> myRequests = friendDao.getFriendRequest(friendId, requesterId);
+            for(FriendRequest e: myRequests) {
+                e.setStatus(FriendRequest.STATUS_ACCEPT);
+                friendDao.saveFriendRequest(e);
+            }
+            friendDao.saveFriends(requesterId, friendId);
+            friendDao.saveFriends(friendId, requesterId);
+            accountService.updateFriendRequestVersion(friendId);
+            accountService.updateFriendRequestVersion(requesterId);
+            accountDao.updateFriendsVersion(requesterId, System.currentTimeMillis());
+            accountDao.updateFriendsVersion(friendId, System.currentTimeMillis());
             return;
         }
         FriendRequest request = new FriendRequest();
         request.setAccountId(friendId);
         request.setMsg(msg);
-        request.setRequesterId(accountId);
+        request.setRequesterId(requesterId);
         request.setStatus(FriendRequest.STATUS_INIT);
         request.setTime(new Date(System.currentTimeMillis()));
         friendDao.saveFriendRequest(request);
