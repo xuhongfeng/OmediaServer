@@ -1,16 +1,27 @@
 package org.tsinghua.omedia.model;
 
-public class Account implements Model {
-    private long accountId = 0;
+public class Account {
+    private long accountId = 0L;
     private String username = "";
     private String password = "";
     private String email = "";
     private String address = "";
     private String phone = "";
     private String realName = "";
-    private long token = 0;
-    private long version = 0;
+    private long token = 0L;
+    private long version = 0L;
+    private long friendsVersion = 0L;
+    private long friendRequestVersion = 0L;
     
+    @Override
+    public String toString() {
+        return "Account [accountId=" + accountId + ", username=" + username
+                + ", password=" + password + ", email=" + email + ", address="
+                + address + ", phone=" + phone + ", realName=" + realName
+                + ", token=" + token + ", version=" + version
+                + ", friendsVersion=" + friendsVersion
+                + ", friendRequestVersion=" + friendRequestVersion + "]";
+    }
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -18,6 +29,10 @@ public class Account implements Model {
         result = prime * result + (int) (accountId ^ (accountId >>> 32));
         result = prime * result + ((address == null) ? 0 : address.hashCode());
         result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result
+                + (int) (friendRequestVersion ^ (friendRequestVersion >>> 32));
+        result = prime * result
+                + (int) (friendsVersion ^ (friendsVersion >>> 32));
         result = prime * result
                 + ((password == null) ? 0 : password.hashCode());
         result = prime * result + ((phone == null) ? 0 : phone.hashCode());
@@ -50,6 +65,10 @@ public class Account implements Model {
                 return false;
         } else if (!email.equals(other.email))
             return false;
+        if (friendRequestVersion != other.friendRequestVersion)
+            return false;
+        if (friendsVersion != other.friendsVersion)
+            return false;
         if (password == null) {
             if (other.password != null)
                 return false;
@@ -76,12 +95,18 @@ public class Account implements Model {
             return false;
         return true;
     }
-    @Override
-    public String toString() {
-        return "Account [accountId=" + accountId + ", username=" + username
-                + ", password=" + password + ", email=" + email + ", address="
-                + address + ", phone=" + phone + ", realName=" + realName
-                + ", token=" + token + ", version=" + version + "]";
+    
+    public long getFriendsVersion() {
+        return friendsVersion;
+    }
+    public void setFriendsVersion(long friendsVersion) {
+        this.friendsVersion = friendsVersion;
+    }
+    public long getFriendRequestVersion() {
+        return friendRequestVersion;
+    }
+    public void setFriendRequestVersion(long friendRequestVersion) {
+        this.friendRequestVersion = friendRequestVersion;
     }
     public String getAddress() {
         return address;

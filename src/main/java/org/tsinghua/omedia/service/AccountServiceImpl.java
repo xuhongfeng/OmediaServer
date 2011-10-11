@@ -1,7 +1,6 @@
 package org.tsinghua.omedia.service;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,7 +9,7 @@ import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.utils.AccountUtil;
 
 @Component("accountService")
-public class AccountServiceImple implements AccountService {
+public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountDAO accountDao;
     @Autowired
@@ -60,12 +59,18 @@ public class AccountServiceImple implements AccountService {
         }
         return true;
     }
+    
+    public void updateFriendsVersion(long accountId) throws IOException {
+        long friendsVersion = System.currentTimeMillis();
+        accountDao.updateFriendsVersion(accountId, friendsVersion);
+    }
+
+    public void updateFriendRequestVersion(long accountId) throws IOException {
+        long friendRequestVersion = System.currentTimeMillis();
+        accountDao.updateFriendRequestVersion(accountId, friendRequestVersion);
+    }
 
     public void setAccountDao(AccountDAO accountDao) {
         this.accountDao = accountDao;
-    }
-
-    public List<Account> searchAccounts(String keyword) throws IOException {
-        return accountDao.searchAccounts(keyword);
     }
 }

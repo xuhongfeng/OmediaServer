@@ -71,4 +71,18 @@ public class MockAccountDao implements AccountDAO {
         return null;
     }
 
+    @Override
+    public void updateFriendsVersion(long accountId, long friendsVersion)
+            throws DbException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateFriendRequestVersion(long accountId,
+            long friendRequestVersion) throws DbException {
+        // TODO Auto-generated method stub
+        
+    }
+
 }

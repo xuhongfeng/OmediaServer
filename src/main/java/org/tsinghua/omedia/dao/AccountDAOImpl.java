@@ -17,7 +17,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
     private static final Logger logger = Logger.getLogger(AccountDAOImpl.class);
 
     public Account getAccount(String username) throws DbException {
-        String sql = "select accountId,password,email,realName,address,phone,version,token" +
+        String sql = "select accountId,password,email,realName,address,phone," +
+                "version,token,friendsVersion,friendRequestVersion" +
                 " from account where username=?";
         Connection conn = null;
         try {
@@ -36,6 +37,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
                 String phone = rs.getString(6);
                 long version = rs.getLong(7);
                 long token = rs.getLong(8);
+                long friendsVersion = rs.getLong(9);
+                long friendRequestVersion = rs.getLong(10);
                 account.setEmail(email);
                 account.setAccountId(id);
                 account.setPassword(password);
@@ -45,6 +48,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
                 account.setPhone(phone);
                 account.setVersion(version);
                 account.setToken(token);
+                account.setFriendsVersion(friendsVersion);
+                account.setFriendRequestVersion(friendRequestVersion);
             }
             return account;
         } catch (Exception e) {
@@ -56,7 +61,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
     }
     
     public Account getAccount(long accountId) throws DbException {
-        String sql = "select username,password,email,realName,address,phone,version,token" +
+        String sql = "select username,password,email,realName,address,phone," +
+                "version,token,friendsVersion,friendRequestVersion" +
                 " from account where accountId=?";
         Connection conn = null;
         try {
@@ -75,6 +81,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
                 String phone = rs.getString(6);
                 long version = rs.getLong(7);
                 long token = rs.getLong(8);
+                long friendsVersion = rs.getLong(9);
+                long friendRequestVersion = rs.getLong(10);
                 account.setEmail(email);
                 account.setAccountId(accountId);
                 account.setPassword(password);
@@ -84,6 +92,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
                 account.setPhone(phone);
                 account.setVersion(version);
                 account.setToken(token);
+                account.setFriendsVersion(friendsVersion);
+                account.setFriendRequestVersion(friendRequestVersion);
             }
             return account;
         } catch (Exception e) {
@@ -96,7 +106,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
 
     public Account getAccount(String username, String password)
             throws DbException {
-        String sql = "select accountId,email,realName,address,phone,version,token" +
+        String sql = "select accountId,email,realName,address,phone," +
+                "version,token,friendsVersion,friendRequestVersion" +
                 " from account where username=? and password=?";
         Connection conn = null;
         try {
@@ -115,6 +126,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
                 String phone = rs.getString(5);
                 long version = rs.getLong(6);
                 long token = rs.getLong(7);
+                long friendsVersion = rs.getLong(8);
+                long friendRequestVersion = rs.getLong(9);
                 account.setEmail(email);
                 account.setAccountId(id);
                 account.setPassword(password);
@@ -124,6 +137,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
                 account.setPhone(phone);
                 account.setVersion(version);
                 account.setToken(token);
+                account.setFriendsVersion(friendsVersion);
+                account.setFriendRequestVersion(friendRequestVersion);
             }
             return account;
         } catch (Exception e) {
@@ -136,8 +151,9 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
 
 
     public void saveAccount(Account account) throws DbException {
-        String sql = "replace into account(accountId,username,password,email,realName,address,phone,version,token)" +
-                " values(?,?,?,?,?,?,?,?,?)";
+        String sql = "replace into account(accountId,username,password,email," +
+                "realName,address,phone,version,token,friendsVersion,friendRequestVersion)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?)";
         Connection conn = null;
         try {
             conn = openConnection();
@@ -151,6 +167,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
             stmt.setString(7, account.getPhone());
             stmt.setLong(8, account.getVersion());
             stmt.setLong(9, account.getToken());
+            stmt.setLong(10, account.getFriendsVersion());
+            stmt.setLong(11, account.getFriendRequestVersion());
             stmt.executeUpdate();
         } catch (Exception e) {
             throw new DbException("add account failed! account="
@@ -176,6 +194,42 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
             closeConnection(conn);
         }
     }
+    
+    public void updateFriendsVersion(long accountId, long friendsVersion)
+            throws DbException {
+        String sql = "update account set friendsVersion=? where accountId=?";
+        Connection conn = null;
+        try {
+            conn = openConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, friendsVersion);
+            stmt.setLong(2, accountId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DbException("update account friendsVersion failed! accountId="
+                    + accountId, e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
+
+    public void updateFriendRequestVersion(long accountId,
+            long friendRequestVersion) throws DbException {
+        String sql = "update account set friendRequestVersion=? where accountId=?";
+        Connection conn = null;
+        try {
+            conn = openConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, friendRequestVersion);
+            stmt.setLong(2, accountId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DbException("update account friendRequestVersion failed! accountId="
+                    + accountId, e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
 
     public List<Account> searchAccounts(String keyword) throws DbException {
         List<Account> ret = new ArrayList<Account>();
@@ -192,18 +246,20 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
             return ret;
         }
         StringBuilder sql = new StringBuilder();
-        sql.append("select accountId,username,password,email,realName,address,phone,version,token" +
-                " from account where username like ? or realName like ?");
+        sql.append("select accountId,username,password,email,realName,address,phone," +
+                "version,token,friendsVersion,friendRequestVersion" +
+                " from account where username like ? or realName like ? or address like ?");
         for(int i=1; i<words.size(); i++) {
-            sql.append(" or username like ? or realName like ?");
+            sql.append(" or username like ? or realName like ? or address like ?");
         };
         Connection conn = null;
         try {
             conn = openConnection();
             PreparedStatement stmt = conn.prepareStatement(sql.toString());
             for(int i=0; i<words.size(); i++) {
-                stmt.setString(2*i+1, "%"+words.get(i)+"%");
-                stmt.setString(2*i+2, "%"+words.get(i)+"%");
+                stmt.setString(3*i+1, "%"+words.get(i)+"%");
+                stmt.setString(3*i+2, "%"+words.get(i)+"%");
+                stmt.setString(3*i+3, "%"+words.get(i)+"%");
             }
             ResultSet rs = stmt.executeQuery();
             Account account = null;
@@ -218,6 +274,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
                 String phone = rs.getString(7);
                 long version = rs.getLong(8);
                 long token = rs.getLong(9);
+                long friendsVersion = rs.getLong(10);
+                long friendRequestVersion = rs.getLong(11);
                 account.setEmail(email);
                 account.setAccountId(accountId);
                 account.setPassword(password);
@@ -227,6 +285,8 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
                 account.setPhone(phone);
                 account.setVersion(version);
                 account.setToken(token);
+                account.setFriendsVersion(friendsVersion);
+                account.setFriendRequestVersion(friendRequestVersion);
                 ret.add(account);
             }
             return ret;
