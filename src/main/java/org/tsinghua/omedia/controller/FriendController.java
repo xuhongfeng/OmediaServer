@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +47,7 @@ public class FriendController {
             JsonSearchFriends json = new JsonSearchFriends(accounts);
             return objectMapper.writeValueAsString(json);
         } catch (Exception e) {
-            logger.error("get account failed", e);
+            logger.error("searchFriends failed", e);
             return "{\"result\":-1}";
         }
     }
@@ -74,7 +75,7 @@ public class FriendController {
             return objectMapper.writeValueAsString(new JsonFriendRequestArray(
                     accountList, requests, account.getFriendRequestVersion()));
         } catch (Exception e) {
-            logger.error("get account failed", e);
+            logger.error("getFriendRequest failed", e);
             return "{\"result\":-1}";
         }
     }
@@ -94,7 +95,7 @@ public class FriendController {
             
             return objectMapper.writeValueAsString(new JsonFriendArray(friends, account.getFriendsVersion()));
         } catch (Exception e) {
-            logger.error("get account failed", e);
+            logger.error("getFriends failed", e);
             return "{\"result\":-1}";
         }
     }
@@ -121,7 +122,7 @@ public class FriendController {
                     msg.getBytes("ISO8859_1"), "utf8"));
             return "{\"result\":1}";
         } catch (Exception e) {
-            logger.error("get account failed", e);
+            logger.error("addFriend failed", e);
             return "{\"result\":-1}";
         }
     }
@@ -146,11 +147,10 @@ public class FriendController {
                 return "{\"result\":4}";
             }
         } catch (Exception e) {
-            logger.error("get account failed", e);
+            logger.error("get friendRequestReply failed", e);
             return "{\"result\":-1}";
         }
     }
-
 
     @RequestMapping(value="/deleteFriends.do", method=RequestMethod.GET)
     @ResponseBody
@@ -166,7 +166,54 @@ public class FriendController {
             friendService.deleteFriends(accountId, friendId);
             return "{\"result\":1}";
         } catch (Exception e) {
-            logger.error("get account failed", e);
+            logger.error("deleteFriends", e);
+            return "{\"result\":-1}";
+        }
+    }
+    
+
+    @RequestMapping(value="/socialGraph.do", method=RequestMethod.GET)
+    public String socialGraph(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token, Model model) {
+        Account account;
+        try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+                return "tokenError.html";
+            }
+            model.addAttribute("accountId", accountId);
+            model.addAttribute("token", token);
+            return "jsp/socialGraph.jsp";
+        } catch (Exception e) {
+            logger.error("get contacts failed", e);
+            return "serverError.html";
+        }
+    }
+    
+    @RequestMapping(value="/expandSocialGraph.do", method=RequestMethod.GET)
+    @ResponseBody
+    public String expandSocialGraph(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token
+            ,@RequestParam("friendId") long friendId) {
+        Account account;
+        try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+                return "{\"result\":3}";
+            }
+            if(friendId != accountId) {
+                if(! friendService.isFriend(accountId, friendId)) {
+                    return "{\"result\":4}";
+                }
+            }
+            List<Account> friends = friendService.getFriends(friendId);
+            if(accountId == friendId) {
+                friends.add(account);
+            }
+            //version not used
+            return objectMapper.writeValueAsString(new JsonFriendArray(friends,0));
+        } catch (Exception e) {
+            logger.error("deleteFriends", e);
             return "{\"result\":-1}";
         }
     }

@@ -19,7 +19,7 @@ import org.tsinghua.omedia.utils.AccountUtil;
 public class AccountController{
     private static final Logger logger = Logger.getLogger(AccountController.class);
 
-    private static final String Version = "0.2";
+    private static final String Version = "0.3";
     
     @Autowired
     private AccountService accountService;
