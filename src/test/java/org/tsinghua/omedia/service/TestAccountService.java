@@ -1,4 +1,4 @@
-package org.tsinghua.omedia.dao;
+package org.tsinghua.omedia.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,6 +12,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.tsinghua.omedia.dao.AccountDAO;
+import org.tsinghua.omedia.dao.MockAccountDao;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.service.AccountService;
 import org.tsinghua.omedia.utils.AccountUtil;

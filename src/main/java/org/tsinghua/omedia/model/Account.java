@@ -12,6 +12,8 @@ public class Account {
     private long version = 0L;
     private long friendsVersion = 0L;
     private long friendRequestVersion = 0L;
+    private long ccnFileVersion = 0L;
+    
     
     @Override
     public String toString() {
@@ -20,7 +22,8 @@ public class Account {
                 + address + ", phone=" + phone + ", realName=" + realName
                 + ", token=" + token + ", version=" + version
                 + ", friendsVersion=" + friendsVersion
-                + ", friendRequestVersion=" + friendRequestVersion + "]";
+                + ", friendRequestVersion=" + friendRequestVersion
+                + ", ccnFileVersion=" + ccnFileVersion + "]";
     }
     @Override
     public int hashCode() {
@@ -28,6 +31,8 @@ public class Account {
         int result = 1;
         result = prime * result + (int) (accountId ^ (accountId >>> 32));
         result = prime * result + ((address == null) ? 0 : address.hashCode());
+        result = prime * result
+                + (int) (ccnFileVersion ^ (ccnFileVersion >>> 32));
         result = prime * result + ((email == null) ? 0 : email.hashCode());
         result = prime * result
                 + (int) (friendRequestVersion ^ (friendRequestVersion >>> 32));
@@ -59,6 +64,8 @@ public class Account {
             if (other.address != null)
                 return false;
         } else if (!address.equals(other.address))
+            return false;
+        if (ccnFileVersion != other.ccnFileVersion)
             return false;
         if (email == null) {
             if (other.email != null)
@@ -95,7 +102,12 @@ public class Account {
             return false;
         return true;
     }
-    
+    public long getCcnFileVersion() {
+        return ccnFileVersion;
+    }
+    public void setCcnFileVersion(long ccnFileVersion) {
+        this.ccnFileVersion = ccnFileVersion;
+    }
     public long getFriendsVersion() {
         return friendsVersion;
     }

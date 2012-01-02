@@ -15,5 +15,10 @@
     <context:annotation-config />
 
     <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper"></bean>
+    
+    <bean id="transactionManager"
+        class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
 
 </beans>

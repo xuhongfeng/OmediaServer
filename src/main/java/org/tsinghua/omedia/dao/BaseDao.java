@@ -1,45 +1,21 @@
 package org.tsinghua.omedia.dao;
 
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 
 public class BaseDao {
-    private static final Logger logger = Logger.getLogger(BaseDao.class);
-    @Value("${mysql.url}")
-    private String url;
-    @Value("${mysql.user}")
-    private String user;
-    @Value("${mysql.password}")
-    private String password;
+    @Autowired
+    protected DataSource dataSource;
     
-    static {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            logger.error(e.getMessage());
-        }
-    }
-    public Connection openConnection() throws IOException {
-        try {
-            return DriverManager.getConnection(url, user, password);
-        } catch (SQLException e) {
-            throw new IOException("open mysql connection failed!\nurl="+url
-                    +",username="+user+",password="+password, e);
-        }
+    protected Connection openConnection() {
+        return DataSourceUtils.getConnection(dataSource);
     }
     
-    public void closeConnection(Connection conn) {
-        if(conn != null) {
-            try {
-                conn.close();
-            } catch (SQLException e) {
-                logger.warn("close mysql connection failed!", e);
-            }
-        }
+    protected void closeConnection(Connection conn) {
+        DataSourceUtils.releaseConnection(conn, dataSource);
     }
 }

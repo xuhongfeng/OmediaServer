@@ -6,6 +6,11 @@ import org.tsinghua.omedia.exception.DbException;
 import org.tsinghua.omedia.model.FriendRequest;
 import org.tsinghua.omedia.model.Friends;
 
+/**
+ * 
+ * @author xuhongfeng
+ *
+ */
 public interface FriendDAO {
     public List<Friends> getFriends(long accountId) throws DbException;
     public Friends getFriends(long accountId, long friendId) throws DbException ;

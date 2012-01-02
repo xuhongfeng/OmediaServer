@@ -12,6 +12,11 @@ import org.tsinghua.omedia.exception.DbException;
 import org.tsinghua.omedia.model.FriendRequest;
 import org.tsinghua.omedia.model.Friends;
 
+/**
+ * 
+ * @author xuhongfeng
+ *
+ */
 @Component("friendDao")
 public class FriendDAOImpl extends BaseDao implements FriendDAO {
 
