@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,21 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.model.FriendRequest;
-import org.tsinghua.omedia.service.AccountService;
-import org.tsinghua.omedia.service.FriendService;
 
 @Controller
-public class FriendController {
+public class FriendController extends BaseController {
     private static final Logger logger = Logger.getLogger(FriendController.class);
     
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private FriendService friendService;
-    
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @RequestMapping(value="/searchFriends.do", method=RequestMethod.GET)
     @ResponseBody
     public String searchFriends(@RequestParam("accountId") long accountId,

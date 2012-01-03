@@ -7,6 +7,7 @@ import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.Test;
 
 @ContextConfiguration(locations = { "classpath:web-context.xml" })
+@SuppressWarnings("unused")
 public class TestAccountDao extends AbstractTestNGSpringContextTests {
     private Logger logger = Logger.getLogger(TestAccountDao.class);
 
@@ -29,7 +30,7 @@ public class TestAccountDao extends AbstractTestNGSpringContextTests {
     @Test
     public void testSearchAccounts() {
 //        try {
-//            List<Account> list = accountDao.searchAccounts(" ºê x sdf");
+//            List<Account> list = accountDao.searchAccounts(" ï¿½ï¿½ x sdf");
 //            for(Account e:list) {
 //                logger.info(e);
 //            }

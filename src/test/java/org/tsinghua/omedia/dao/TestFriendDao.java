@@ -12,6 +12,7 @@ import org.tsinghua.omedia.model.FriendRequest;
 import org.tsinghua.omedia.model.Friends;
 
 @ContextConfiguration(locations = { "classpath:web-context.xml" })
+@SuppressWarnings("unused")
 public class TestFriendDao extends AbstractTestNGSpringContextTests {
     private Logger logger = Logger.getLogger(TestFriendDao.class);
     
@@ -29,7 +30,7 @@ public class TestFriendDao extends AbstractTestNGSpringContextTests {
         
         expectedFriendRequest = new FriendRequest();
         expectedFriendRequest.setAccountId(1L);
-        expectedFriendRequest.setMsg("¹þ¹þ");
+        expectedFriendRequest.setMsg("ï¿½ï¿½ï¿½ï¿½");
         expectedFriendRequest.setRequesterId(2l);
         expectedFriendRequest.setStatus(1);
         expectedFriendRequest.setTime(new Date());

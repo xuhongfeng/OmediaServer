@@ -16,8 +16,6 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -28,21 +26,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.model.CcnFile;
-import org.tsinghua.omedia.service.AccountService;
-import org.tsinghua.omedia.service.CcnService;
 
 @Controller
-public class CcnController {
+public class CcnController extends BaseController {
     private Logger logger = Logger.getLogger(CcnController.class);
     
     private volatile long ccnFileVersion = 0L;
-    
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private CcnService ccnService;
-    @Autowired
-    private AccountService accountService;
     
     @Value("${ccn.storage.path}")
     private String ccnStoragePath;

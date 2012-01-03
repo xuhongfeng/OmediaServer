@@ -4,30 +4,21 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.log4j.Logger;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.tsinghua.omedia.model.Account;
-import org.tsinghua.omedia.service.AccountService;
-import org.tsinghua.omedia.utils.AccountUtil;
+import org.tsinghua.omedia.utils.AccountUtils;
 
 @Controller
-public class AccountController{
+public class AccountController extends BaseController {
     private static final Logger logger = Logger.getLogger(AccountController.class);
 
-    private static final String Version = "0.3";
-    
-    @Autowired
-    private AccountService accountService;
-    
-    @Autowired
-    private ObjectMapper objectMapper;
-    @Autowired
-    private AccountUtil accountUtil;
+    @Value("${omedia.version}")
+    private  String Version;
     
     @RequestMapping(value="/register.do", method=RequestMethod.GET)
     @ResponseBody
@@ -103,8 +94,8 @@ public class AccountController{
                 return "{\"result\":3}";
             }
             if (!newPassword.equals("")) {
-                account.setPassword(accountUtil.encryptPassword(newPassword));
-                if(!dbAccount.getPassword().equals(accountUtil.encryptPassword(oldPassword))) {
+                account.setPassword(AccountUtils.encryptPassword(newPassword));
+                if(!dbAccount.getPassword().equals(AccountUtils.encryptPassword(oldPassword))) {
                     return "{\"result\":2}";
                 }
             }
@@ -112,42 +103,6 @@ public class AccountController{
             return "{\"result\":1, \"version\":"+account.getVersion()+"}";
         } catch (Exception e) {
             logger.error("setting failed", e);
-            return "{\"result\":-1}";
-        }
-    }
-    @RequestMapping(value="/checkDataVersion.do", method=RequestMethod.GET)
-    @ResponseBody
-    public String checkDataVersion(@RequestParam("accountId") long accountId,
-            @RequestParam("token") long token,
-            @RequestParam("accountVersion") long accountVersion,
-            @RequestParam("friendRequestVersion") long friendRequestVersion,
-            @RequestParam("friendsVersion") long friendsVersion) {
-        Account account;
-        try {
-            account = accountService.getAccount(accountId);
-            if(account==null || account.getToken()!=token) {
-                return "{\"result\":3}";
-            }
-            JsonCheckDataVersion json = new JsonCheckDataVersion();
-            json.setResult(1);
-            if(account.getVersion() == accountVersion) {
-                json.setAccount(0);
-            } else {
-                json.setAccount(1);
-            }
-            if(account.getFriendRequestVersion() == friendRequestVersion) {
-                json.setFriendRequest(0);
-            } else {
-                json.setFriendRequest(1);
-            }
-            if(account.getFriendsVersion() == friendsVersion) {
-                json.setFriends(0);
-            } else {
-                json.setFriends(1);
-            }
-            return objectMapper.writeValueAsString(json);
-        } catch (Exception e) {
-            logger.error("check data version failed", e);
             return "{\"result\":-1}";
         }
     }
@@ -165,51 +120,6 @@ public class AccountController{
         } catch (Exception e) {
             logger.error("get account failed", e);
             return "{\"result\":-1}";
-        }
-    }
-
-    @SuppressWarnings("unused")
-    private static class JsonCheckDataVersion {
-        private int account;//==1 means accountData need to update
-        private int friendRequest;
-        private int friends;
-        private int result;
-
-        public int getFriends() {
-            return friends;
-        }
-
-
-        public void setFriends(int friends) {
-            this.friends = friends;
-        }
-
-
-        public int getResult() {
-            return result;
-        }
-        
-
-        public int getFriendRequest() {
-            return friendRequest;
-        }
-
-
-        public void setFriendRequest(int friendRequest) {
-            this.friendRequest = friendRequest;
-        }
-
-
-        public void setResult(int result) {
-            this.result = result;
-        }
-
-        public int getAccount() {
-            return account;
-        }
-
-        public void setAccount(int account) {
-            this.account = account;
         }
     }
     
