@@ -14,15 +14,9 @@ public class CcnServiceImpl implements CcnService {
     private CcnDao ccnDao;
 
     @Override
-    public CcnFile saveCcnFile(long accountId, String ccnName)
+    public void saveCcnFile(CcnFile ccnFile)
             throws IOException {
-//        String filePath = 
-//        CcnFile ccnFile = new CcnFile();
-//        ccnFile.setAccountId(accountId);
-//        ccnFile.setCcnname(ccnName);
-//        ccnFile.set
-        //TODO
-        return null;
+        ccnDao.saveCcnFile(ccnFile);
     }
 
     @Override

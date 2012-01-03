@@ -11,7 +11,7 @@ import org.tsinghua.omedia.model.CcnFile;
  *
  */
 public interface CcnService {
-    public CcnFile saveCcnFile(long accountId, String ccnName) throws IOException;
+    public void saveCcnFile(CcnFile ccnFile) throws IOException;
     
     public List<CcnFile> listCcnFiles(long accountId) throws IOException;
 }
