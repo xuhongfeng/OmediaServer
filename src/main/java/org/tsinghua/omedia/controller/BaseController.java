@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.tsinghua.omedia.service.AccountService;
 import org.tsinghua.omedia.service.CcnService;
 import org.tsinghua.omedia.service.FriendService;
+import org.tsinghua.omedia.utils.AccountUtils;
+import org.tsinghua.omedia.utils.CcnUtils;
+import org.tsinghua.omedia.utils.MD5Utils;
 
 public class BaseController {
     
@@ -16,4 +19,10 @@ public class BaseController {
     protected FriendService friendService;
     @Autowired
     protected CcnService ccnService;
+    @Autowired
+    protected CcnUtils ccnUtils;
+    @Autowired
+    protected MD5Utils md5Utils;
+    @Autowired
+    protected AccountUtils accountUtils;
 }

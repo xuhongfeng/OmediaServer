@@ -20,6 +20,41 @@ import org.tsinghua.omedia.model.CcnFile;
 public class CcnDaoImpl extends BaseDao implements CcnDao {
 
     @Override
+    public List<CcnFile> listAllCcnFiles() throws DbException {
+        String sql = "select accountId, ccnName, time, filePath, type from ccnFile "
+                + " where order by time desc";
+        List<CcnFile> ret = new ArrayList<CcnFile>();
+        Connection conn = null;
+        try {
+            conn = openConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                long accountId = rs.getLong(1);
+                String ccnName = rs.getString(2);
+                java.util.Date time = new java.util.Date(rs.getTimestamp(3)
+                        .getTime());
+                String filePath = rs.getString(4);
+                int type = rs.getInt(5);
+                CcnFile ccnFile = new CcnFile();
+                ccnFile.setAccountId(accountId);
+                ccnFile.setCcnname(ccnName);
+                ccnFile.setFilePath(filePath);
+                ccnFile.setTime(time);
+                ccnFile.setType(type);
+                ret.add(ccnFile);
+            }
+            return ret;
+        } catch (Exception e) {
+            throw new DbException("listAllCcnFiles failed");
+        } finally {
+            if (conn != null) {
+                closeConnection(conn);
+            }
+        }
+    }
+
+    @Override
     public List<CcnFile> listCcnFiles(int type) throws DbException {
         String sql = "select accountId, ccnName, time, filePath from ccnFile "
                 + " where type =? order by time desc";

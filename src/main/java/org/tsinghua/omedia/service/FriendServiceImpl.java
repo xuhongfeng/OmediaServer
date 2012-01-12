@@ -14,7 +14,7 @@ import org.tsinghua.omedia.model.FriendRequest;
 import org.tsinghua.omedia.model.Friends;
 
 @Component("friendService")
-public class FriendServiceImpl implements FriendService {
+public class FriendServiceImpl extends BaseService implements FriendService {
     @Autowired
     private AccountService accountService;
     
@@ -86,7 +86,7 @@ public class FriendServiceImpl implements FriendService {
         }
         List<FriendRequest> friendRequests = friendDao.getFriendRequest(requesterId, friendId);
         if(friendRequests.size() != 0) {
-            //¶Ô·½ÒÑ¾­¸øÎÒ·¢ËÍ¹ýºÃÓÑÇëÇó
+            //ï¿½Ô·ï¿½ï¿½Ñ¾ï¿½ï¿½ï¿½ï¿½Ò·ï¿½ï¿½Í¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             for(FriendRequest e: friendRequests) {
                 e.setStatus(FriendRequest.STATUS_ACCEPT);
                 friendDao.saveFriendRequest(e);

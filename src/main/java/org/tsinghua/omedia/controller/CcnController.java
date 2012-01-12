@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,22 +52,9 @@ public class CcnController extends BaseController {
         }
     }
 
-    @RequestMapping(value="/ccnPutFile.do/{accountId}/{token}", method=RequestMethod.POST)
+    @RequestMapping(value="/ccnPutFile.do", method=RequestMethod.POST)
     @ResponseBody
-    public String ccnPutFile(HttpServletRequest request
-            ,@PathVariable long accountId, @PathVariable long token) {
-        logger.info("ccnPutFile.do called!accountId="+accountId+",token="+token);
-        Account account;
-        try {
-            account = accountService.getAccount(accountId);
-        } catch (IOException e1) {
-            logger.error("", e1);
-            return "{\"result\":-1}";
-        }
-        if(account==null || account.getToken()!=token) {
-            logger.info("auth failed!");
-            return "{\"result\":3}";
-        }
+    public String ccnPutFile(HttpServletRequest request) {
         if(!ServletFileUpload.isMultipartContent(request)) {
             logger.error("Not a multipart request");
             return "{\"result\":-1}";
@@ -96,6 +82,19 @@ public class CcnController extends BaseController {
                         return "{\"result\":-1}";
                     }
                 }
+            }
+            long accountId = Long.parseLong(model.get("accountId").toString());
+            long token = Long.parseLong(model.get("token").toString());
+            Account account;
+            try {
+                account = accountService.getAccount(accountId);
+            } catch (IOException e1) {
+                logger.error("", e1);
+                return "{\"result\":-1}";
+            }
+            if(account==null || account.getToken()!=token) {
+                logger.info("auth failed!");
+                return "{\"result\":3}";
             }
             if(input == null) {
                 logger.error("inputstream = null");
@@ -132,6 +131,7 @@ public class CcnController extends BaseController {
             ccnFile.setFilePath(filePath);
             ccnService.saveCcnFile(ccnFile);
             logger.info("save ccnFile:" + ccnFile);
+            ccnUtils.ccnPutFile(ccnFile);
             return "{\"result\":1}";
         } catch (FileUploadException e) {
             logger.error("", e);

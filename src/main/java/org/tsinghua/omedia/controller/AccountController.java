@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.tsinghua.omedia.model.Account;
-import org.tsinghua.omedia.utils.AccountUtils;
 
 @Controller
 public class AccountController extends BaseController {
@@ -94,8 +93,8 @@ public class AccountController extends BaseController {
                 return "{\"result\":3}";
             }
             if (!newPassword.equals("")) {
-                account.setPassword(AccountUtils.encryptPassword(newPassword));
-                if(!dbAccount.getPassword().equals(AccountUtils.encryptPassword(oldPassword))) {
+                account.setPassword(accountUtils.encryptPassword(newPassword));
+                if(!dbAccount.getPassword().equals(accountUtils.encryptPassword(oldPassword))) {
                     return "{\"result\":2}";
                 }
             }

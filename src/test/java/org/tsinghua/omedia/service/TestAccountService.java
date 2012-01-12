@@ -16,6 +16,8 @@ import org.tsinghua.omedia.dao.AccountDAO;
 import org.tsinghua.omedia.dao.MockAccountDao;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.utils.AccountUtils;
+import org.tsinghua.omedia.utils.CcnUtils;
+import org.tsinghua.omedia.utils.MD5Utils;
 
 @ContextConfiguration(locations = { "classpath:web-context.xml" })
 public class TestAccountService extends AbstractTestNGSpringContextTests {
@@ -28,6 +30,12 @@ public class TestAccountService extends AbstractTestNGSpringContextTests {
     
     @Autowired
     private AccountService accountService;
+    @Autowired
+    protected CcnUtils ccnUtils;
+    @Autowired
+    protected MD5Utils md5Utils;
+    @Autowired
+    protected AccountUtils accountUtils;
     
     @BeforeMethod
     public void beforeClass() throws IOException {
@@ -36,7 +44,7 @@ public class TestAccountService extends AbstractTestNGSpringContextTests {
         account1.setAccountId(1L);
         account1.setAddress("1.address");
         account1.setEmail("1.email");
-        account1.setPassword(AccountUtils.encryptPassword("1.password"));
+        account1.setPassword(accountUtils.encryptPassword("1.password"));
         account1.setPhone("1.phone");
         account1.setRealName("1.realName");
         account1.setToken(1L);
@@ -80,7 +88,7 @@ public class TestAccountService extends AbstractTestNGSpringContextTests {
             expectedAccount.setAccountId(actualAccount.getAccountId());
             expectedAccount.setVersion(actualAccount.getVersion());
             expectedAccount.setUsername(username);
-            expectedAccount.setPassword(AccountUtils.encryptPassword(password));
+            expectedAccount.setPassword(accountUtils.encryptPassword(password));
             expectedAccount.setEmail(email);
             Assert.assertEquals(expectedAccount, actualAccount);
         } catch (IOException e) {

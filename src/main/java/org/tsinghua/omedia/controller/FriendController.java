@@ -163,6 +163,8 @@ public class FriendController extends BaseController {
     @RequestMapping(value="/socialGraph.do", method=RequestMethod.GET)
     public String socialGraph(@RequestParam("accountId") long accountId,
             @RequestParam("token") long token, Model model) {
+        logger.info("socialGraph.do called,accountId="+accountId
+                +",token="+token);
         Account account;
         try {
             account = accountService.getAccount(accountId);

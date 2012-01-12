@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tsinghua.omedia.dao.AccountDAO;
 import org.tsinghua.omedia.model.Account;
-import org.tsinghua.omedia.utils.AccountUtils;
 
 @Component("accountService")
-public class AccountServiceImpl implements AccountService {
+public class AccountServiceImpl extends BaseService implements AccountService {
     @Autowired
     private AccountDAO accountDao;
 
@@ -25,9 +24,9 @@ public class AccountServiceImpl implements AccountService {
     public Account createAccount(String username, String password, String email) throws IOException {
         Account account = new Account();
         account.setEmail(email);
-        account.setPassword(AccountUtils.encryptPassword(password));
+        account.setPassword(accountUtils.encryptPassword(password));
         account.setUsername(username);
-        AccountUtils.generateId(account);
+        accountUtils.generateId(account);
         account.setVersion(System.currentTimeMillis());
         accountDao.saveAccount(account);
         return account;
@@ -40,12 +39,12 @@ public class AccountServiceImpl implements AccountService {
 
     public Account login(String username, String password) throws IOException {
         Account account = accountDao.getAccount(username,
-                AccountUtils.encryptPassword(password));
+                accountUtils.encryptPassword(password));
         return account;
     }
 
     public long updateToken(long accountId) throws IOException {
-        long token = AccountUtils.generateToken();
+        long token = accountUtils.generateToken();
         accountDao.updateToken(accountId, token);
         return token;
     }

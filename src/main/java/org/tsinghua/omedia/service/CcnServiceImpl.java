@@ -9,7 +9,7 @@ import org.tsinghua.omedia.dao.CcnDao;
 import org.tsinghua.omedia.model.CcnFile;
 
 @Component("ccnService")
-public class CcnServiceImpl implements CcnService {
+public class CcnServiceImpl extends BaseService implements CcnService {
     @Autowired
     private CcnDao ccnDao;
 
@@ -22,5 +22,13 @@ public class CcnServiceImpl implements CcnService {
     @Override
     public List<CcnFile> listCcnFiles(long accountId) throws IOException {
         return ccnDao.listAllCcnFiles(accountId);
+    }
+
+    @Override
+    public void dumpCcnFileToRepo() throws IOException {
+        List<CcnFile> ccnFiles = ccnDao.listAllCcnFiles();
+        for(CcnFile e:ccnFiles) {
+            ccnUtils.ccnPutFile(e);
+        }
     }
 }

@@ -8,14 +8,17 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import org.springframework.stereotype.Component;
+
 /**
  *  
  * @author xuhongfeng
  *
  */
+@Component("md5Utils")
 public class MD5Utils {
     
-    public static String md5(File file) throws IOException {
+    public String md5(File file) throws IOException {
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -41,7 +44,7 @@ public class MD5Utils {
         return getHashtext(digest);
     }
     
-    public static String md5(String s) throws IOException {
+    public String md5(String s) throws IOException {
         MessageDigest md = null;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -52,7 +55,7 @@ public class MD5Utils {
         return getHashtext(digest);
     }
 
-    private static String getHashtext(byte[] digest) {
+    private String getHashtext(byte[] digest) {
         BigInteger bigInt = new BigInteger(1, digest);
         String hashtext = bigInt.toString(16);
         while (hashtext.length() < 32) {

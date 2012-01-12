@@ -11,6 +11,7 @@ import org.tsinghua.omedia.model.CcnFile;
  *
  */
 public interface CcnDao {
+    public List<CcnFile> listAllCcnFiles() throws DbException;
     public List<CcnFile> listPrivateCcnFiles(long accountId) throws DbException;
     public List<CcnFile> listAllCcnFiles(long accountId) throws DbException;
     public List<CcnFile> listCcnFiles(int type) throws DbException;
