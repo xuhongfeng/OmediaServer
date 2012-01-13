@@ -12,7 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import org.tsinghua.omedia.dao.AccountDAO;
+import org.tsinghua.omedia.dao.AccountDao;
 import org.tsinghua.omedia.dao.MockAccountDao;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.utils.AccountUtils;
@@ -24,7 +24,7 @@ public class TestAccountService extends AbstractTestNGSpringContextTests {
     private final static Logger logger = Logger
             .getLogger(TestAccountService.class);
 
-    private AccountDAO accountDao;
+    private AccountDao accountDao;
     private Account account1;
     private List<Account> datas;
     

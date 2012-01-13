@@ -11,10 +11,15 @@ import org.springframework.stereotype.Component;
 import org.tsinghua.omedia.exception.DbException;
 import org.tsinghua.omedia.model.Account;
 
+/**
+ * 
+ * @author xuhongfeng
+ *
+ */
 @Component("accountDao")
-public class AccountDAOImpl extends BaseDao implements AccountDAO {
+public class AccountDaoImpl extends BaseDao implements AccountDao {
     @SuppressWarnings("unused")
-    private static final Logger logger = Logger.getLogger(AccountDAOImpl.class);
+    private static final Logger logger = Logger.getLogger(AccountDaoImpl.class);
 
     public Account getAccount(String username) throws DbException {
         String sql = "select accountId,password,email,realName,address,phone," +
@@ -212,6 +217,40 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
             closeConnection(conn);
         }
     }
+    
+    public void updateCcnFileVersion(long accountId, long ccnFileVersion)
+            throws DbException {
+        String sql = "update account set ccnFileVersion=? where accountId=?";
+        Connection conn = null;
+        try {
+            conn = openConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, ccnFileVersion);
+            stmt.setLong(2, accountId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DbException("update account ccnFileVersion failed! accountId="
+                    + accountId, e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
+    
+    public void updateCcnFileVersion(long ccnFileVersion)
+            throws DbException {
+        String sql = "update account set ccnFileVersion=?";
+        Connection conn = null;
+        try {
+            conn = openConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, ccnFileVersion);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DbException("update account ccnFileVersion failed!", e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
 
     public void updateFriendRequestVersion(long accountId,
             long friendRequestVersion) throws DbException {
@@ -233,10 +272,10 @@ public class AccountDAOImpl extends BaseDao implements AccountDAO {
 
     public List<Account> searchAccounts(String keyword) throws DbException {
         List<Account> ret = new ArrayList<Account>();
-        //ÒÔwhitespace split String, ½á¹û¿ÉÄÜº¬whitespace
+        //ï¿½ï¿½whitespace split String, ï¿½ï¿½ï¿½ï¿½ï¿½Üºï¿½whitespace
         String[] temp  =keyword.split("\\s+");
         List<String> words = new ArrayList<String>();
-        //È¡³öwhitespace
+        //È¡ï¿½ï¿½whitespace
         for(String e:temp) {
             if(!e.trim().isEmpty()) {
                 words.add(e);

@@ -4,13 +4,13 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.tsinghua.omedia.dao.AccountDAO;
+import org.tsinghua.omedia.dao.AccountDao;
 import org.tsinghua.omedia.model.Account;
 
 @Component("accountService")
 public class AccountServiceImpl extends BaseService implements AccountService {
     @Autowired
-    private AccountDAO accountDao;
+    private AccountDao accountDao;
 
     public Account getAccount(long accountId) throws IOException {
         return accountDao.getAccount(accountId);
@@ -67,7 +67,7 @@ public class AccountServiceImpl extends BaseService implements AccountService {
         accountDao.updateFriendRequestVersion(accountId, friendRequestVersion);
     }
 
-    public void setAccountDao(AccountDAO accountDao) {
+    public void setAccountDao(AccountDao accountDao) {
         this.accountDao = accountDao;
     }
 }

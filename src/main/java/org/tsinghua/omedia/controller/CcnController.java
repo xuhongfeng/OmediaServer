@@ -42,7 +42,13 @@ public class CcnController extends BaseController {
     public String showCcnFiles(@RequestParam("accountId") long accountId,
             @RequestParam("token") long token) {
         logger.info("showPublicCcnFiles called, accountId="+accountId +",token=" + token);
+
+        Account account;
         try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+                return "{\"result\":3}";
+            }
             List<CcnFile> ccnFiles = ccnService.listCcnFiles(accountId);
             JsonCcnFileArray json = new JsonCcnFileArray(ccnFileVersion, ccnFiles.toArray(new CcnFile[0]));
             return objectMapper.writeValueAsString(json);
@@ -148,10 +154,90 @@ public class CcnController extends BaseController {
     private static class JsonCcnFileArray {
         private int result = 1;
         private long version;
-        private CcnFile[] ccnFiles = new CcnFile[0];
-        public JsonCcnFileArray(long version, CcnFile[] ccnFiles) {
+        private JsonCcnFile[] ccnFiles = new JsonCcnFile[0];
+        
+        public JsonCcnFileArray(long version, CcnFile[] files) {
             this.version = version;
+            this.ccnFiles = new JsonCcnFile[files.length];
+            for(int i=0; i<ccnFiles.length; i++) {
+                ccnFiles[i] = new JsonCcnFile(files[i]);
+            }
+        }
+        
+        public int getResult() {
+            return result;
+        }
+        public void setResult(int result) {
+            this.result = result;
+        }
+        public long getVersion() {
+            return version;
+        }
+        public void setVersion(long version) {
+            this.version = version;
+        }
+        public JsonCcnFile[] getCcnFiles() {
+            return ccnFiles;
+        }
+        public void setCcnFiles(JsonCcnFile[] ccnFiles) {
             this.ccnFiles = ccnFiles;
+        }
+        
+    }
+    
+    @SuppressWarnings("unused")
+    private static class JsonCcnFile {
+        private long accountId;
+        private long time;
+        private String ccnName;
+        private String filePath;
+        private int type;
+        private long size;
+        
+        public JsonCcnFile(CcnFile ccnFile) {
+            accountId =ccnFile.getAccountId();
+            time = ccnFile.getTime().getTime();
+            ccnName = ccnFile.getCcnname();
+            filePath = ccnFile.getFilePath();
+            type = ccnFile.getType();
+            size = ccnFile.getSize();
+        }
+        
+        public long getAccountId() {
+            return accountId;
+        }
+        public void setAccountId(long accountId) {
+            this.accountId = accountId;
+        }
+        public long getTime() {
+            return time;
+        }
+        public void setTime(long time) {
+            this.time = time;
+        }
+        public String getCcnName() {
+            return ccnName;
+        }
+        public void setCcnName(String ccnName) {
+            this.ccnName = ccnName;
+        }
+        public String getFilePath() {
+            return filePath;
+        }
+        public void setFilePath(String filePath) {
+            this.filePath = filePath;
+        }
+        public int getType() {
+            return type;
+        }
+        public void setType(int type) {
+            this.type = type;
+        }
+        public long getSize() {
+            return size;
+        }
+        public void setSize(long size) {
+            this.size = size;
         }
     }
 }

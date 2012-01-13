@@ -18,7 +18,7 @@ import org.tsinghua.omedia.model.Friends;
  *
  */
 @Component("friendDao")
-public class FriendDAOImpl extends BaseDao implements FriendDAO {
+public class FriendDaoImpl extends BaseDao implements FriendDao {
 
     public List<Friends> getFriends(long accountId) throws DbException {
         String sql = "select friendId from friends"

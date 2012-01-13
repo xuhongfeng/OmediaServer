@@ -17,7 +17,7 @@ public class TestFriendDao extends AbstractTestNGSpringContextTests {
     private Logger logger = Logger.getLogger(TestFriendDao.class);
     
     @Autowired
-    private FriendDAO friendDao;
+    private FriendDao friendDao;
 
     private Friends expectedFriends;
     private FriendRequest expectedFriendRequest;

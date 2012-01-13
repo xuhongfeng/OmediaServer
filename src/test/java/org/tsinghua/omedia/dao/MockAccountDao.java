@@ -5,7 +5,7 @@ import java.util.List;
 import org.tsinghua.omedia.exception.DbException;
 import org.tsinghua.omedia.model.Account;
 
-public class MockAccountDao implements AccountDAO {
+public class MockAccountDao implements AccountDao {
     private List<Account> datas;
     
     public MockAccountDao(List<Account> datas) {
@@ -81,6 +81,19 @@ public class MockAccountDao implements AccountDAO {
     @Override
     public void updateFriendRequestVersion(long accountId,
             long friendRequestVersion) throws DbException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateCcnFileVersion(long accountId, long ccnFileVersion)
+            throws DbException {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void updateCcnFileVersion(long ccnFileVersion) throws DbException {
         // TODO Auto-generated method stub
         
     }

@@ -11,7 +11,7 @@ import org.tsinghua.omedia.model.Friends;
  * @author xuhongfeng
  *
  */
-public interface FriendDAO {
+public interface FriendDao {
     public List<Friends> getFriends(long accountId) throws DbException;
     public Friends getFriends(long accountId, long friendId) throws DbException ;
     public void saveFriends(long accountId, long friendId) throws DbException ;

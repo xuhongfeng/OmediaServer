@@ -12,7 +12,7 @@ public class TestAccountDao extends AbstractTestNGSpringContextTests {
     private Logger logger = Logger.getLogger(TestAccountDao.class);
 
     @Autowired
-    private AccountDAO accountDao;
+    private AccountDao accountDao;
     
     @Test
     public void testGetAccount() {

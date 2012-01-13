@@ -24,7 +24,6 @@ public class CcnFile {
     
     public CcnFile(long accountId, Date time, String ccnName, String filePath,
             int type) {
-        super();
         this.accountId = accountId;
         this.time = time;
         this.ccnName = ccnName;

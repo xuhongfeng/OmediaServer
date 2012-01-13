@@ -2,7 +2,7 @@ package org.tsinghua.omedia.service;
 
 import java.io.IOException;
 
-import org.tsinghua.omedia.dao.AccountDAO;
+import org.tsinghua.omedia.dao.AccountDao;
 import org.tsinghua.omedia.model.Account;
 
 public interface AccountService {
@@ -16,5 +16,5 @@ public interface AccountService {
     public void updateFriendsVersion(long accountId) throws IOException;
     public void updateFriendRequestVersion(long accountId) throws IOException;
     
-    public void setAccountDao(AccountDAO accountDao);
+    public void setAccountDao(AccountDao accountDao);
 }

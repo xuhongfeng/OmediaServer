@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.tsinghua.omedia.dao.AccountDAO;
-import org.tsinghua.omedia.dao.FriendDAO;
+import org.tsinghua.omedia.dao.AccountDao;
+import org.tsinghua.omedia.dao.FriendDao;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.model.FriendRequest;
 import org.tsinghua.omedia.model.Friends;
@@ -19,9 +19,9 @@ public class FriendServiceImpl extends BaseService implements FriendService {
     private AccountService accountService;
     
     @Autowired
-    private AccountDAO accountDao;
+    private AccountDao accountDao;
     @Autowired
-    private FriendDAO friendDao;
+    private FriendDao friendDao;
 
     public List<Account> searchFriends(String keyword) throws IOException {
         return accountDao.searchAccounts(keyword);

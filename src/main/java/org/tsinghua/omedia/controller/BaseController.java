@@ -1,6 +1,9 @@
 package org.tsinghua.omedia.controller;
 
+import javax.annotation.PostConstruct;
+
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.tsinghua.omedia.service.AccountService;
 import org.tsinghua.omedia.service.CcnService;
@@ -25,4 +28,14 @@ public class BaseController {
     protected MD5Utils md5Utils;
     @Autowired
     protected AccountUtils accountUtils;
+    
+    public BaseController() {
+    }
+    
+    @SuppressWarnings("unused")
+    @PostConstruct
+    private void init() {
+        objectMapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS,
+                false);
+    }
 }

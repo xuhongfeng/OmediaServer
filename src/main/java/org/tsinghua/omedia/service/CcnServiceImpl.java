@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.tsinghua.omedia.dao.AccountDao;
 import org.tsinghua.omedia.dao.CcnDao;
 import org.tsinghua.omedia.model.CcnFile;
 
@@ -12,11 +13,18 @@ import org.tsinghua.omedia.model.CcnFile;
 public class CcnServiceImpl extends BaseService implements CcnService {
     @Autowired
     private CcnDao ccnDao;
+    @Autowired
+    private AccountDao accountDao;
 
     @Override
     public void saveCcnFile(CcnFile ccnFile)
             throws IOException {
         ccnDao.saveCcnFile(ccnFile);
+        if(ccnFile.getType() == CcnFile.TYPE_PRIVATE) {
+            accountDao.updateCcnFileVersion(ccnFile.getAccountId(), System.currentTimeMillis());
+        } else {
+            accountDao.updateCcnFileVersion(System.currentTimeMillis());
+        }
     }
 
     @Override
