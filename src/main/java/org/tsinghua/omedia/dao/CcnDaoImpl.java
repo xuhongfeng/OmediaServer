@@ -21,8 +21,8 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
 
     @Override
     public List<CcnFile> listAllCcnFiles() throws DbException {
-        String sql = "select accountId, ccnName, time, filePath, type from ccnFile "
-                + " where order by time desc";
+        String sql = "select accountId, ccnName, time, filePath, type, size from ccnFile "
+                + " order by time desc";
         List<CcnFile> ret = new ArrayList<CcnFile>();
         Connection conn = null;
         try {
@@ -36,12 +36,14 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
                         .getTime());
                 String filePath = rs.getString(4);
                 int type = rs.getInt(5);
+                long size = rs.getLong(6);
                 CcnFile ccnFile = new CcnFile();
                 ccnFile.setAccountId(accountId);
                 ccnFile.setCcnname(ccnName);
                 ccnFile.setFilePath(filePath);
                 ccnFile.setTime(time);
                 ccnFile.setType(type);
+                ccnFile.setSize(size);
                 ret.add(ccnFile);
             }
             return ret;
@@ -56,7 +58,7 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
 
     @Override
     public List<CcnFile> listCcnFiles(int type) throws DbException {
-        String sql = "select accountId, ccnName, time, filePath from ccnFile "
+        String sql = "select accountId, ccnName, time, filePath, size from ccnFile "
                 + " where type =? order by time desc";
         List<CcnFile> ret = new ArrayList<CcnFile>();
         Connection conn = null;
@@ -71,12 +73,14 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
                 java.util.Date time = new java.util.Date(rs.getTimestamp(3)
                         .getTime());
                 String filePath = rs.getString(4);
+                long size = rs.getLong(5);
                 CcnFile ccnFile = new CcnFile();
                 ccnFile.setAccountId(accountId);
                 ccnFile.setCcnname(ccnName);
                 ccnFile.setFilePath(filePath);
                 ccnFile.setTime(time);
                 ccnFile.setType(type);
+                ccnFile.setSize(size);
                 ret.add(ccnFile);
             }
             return ret;
@@ -92,7 +96,7 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
 
     @Override
     public List<CcnFile> listPrivateCcnFiles(long accountId) throws DbException {
-        String sql = "select ccnName, time, filePath, type from ccnFile "
+        String sql = "select ccnName, time, filePath, type, size from ccnFile "
                 + " where accountId =? order by time desc";
         List<CcnFile> ret = new ArrayList<CcnFile>();
         Connection conn = null;
@@ -106,12 +110,14 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
                 java.util.Date time = new java.util.Date(rs.getTimestamp(2).getTime());
                 String filePath = rs.getString(3);
                 int type = rs.getInt(4);
+                long size = rs.getLong(5);
                 CcnFile ccnFile = new CcnFile();
                 ccnFile.setAccountId(accountId);
                 ccnFile.setCcnname(ccnName);
                 ccnFile.setFilePath(filePath);
                 ccnFile.setTime(time);
                 ccnFile.setType(type);
+                ccnFile.setSize(size);
                 ret.add(ccnFile);
             }
             return ret;
@@ -127,7 +133,7 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
 
     @Override
     public List<CcnFile> listAllCcnFiles(long accountId) throws DbException {
-        String sql = "select accountId, ccnName, time, filePath, type from ccnFile "
+        String sql = "select accountId, ccnName, time, filePath, type, size from ccnFile "
                 + " where accountId =? or type=? order by time desc";
         List<CcnFile> ret = new ArrayList<CcnFile>();
         Connection conn = null;
@@ -143,12 +149,14 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
                 java.util.Date time = new java.util.Date(rs.getTimestamp(3).getTime());
                 String filePath = rs.getString(4);
                 int type = rs.getInt(5);
+                long size = rs.getLong(6);
                 CcnFile ccnFile = new CcnFile();
                 ccnFile.setAccountId(id);
                 ccnFile.setCcnname(ccnName);
                 ccnFile.setFilePath(filePath);
                 ccnFile.setTime(time);
                 ccnFile.setType(type);
+                ccnFile.setSize(size);
                 ret.add(ccnFile);
             }
             return ret;
@@ -165,8 +173,8 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
 
     @Override
     public void saveCcnFile(CcnFile ccnFile) throws DbException {
-        String sql = "replace ccnFile(accountId,ccnName,time,filePath,type) "
-                + "values(?,?,?,?,?)";
+        String sql = "replace ccnFile(accountId,ccnName,time,filePath,type,size) "
+                + "values(?,?,?,?,?,?)";
         Connection conn = null;
         try {
             conn = openConnection();
@@ -176,6 +184,7 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
             stmt.setTimestamp(3, new Timestamp(ccnFile.getTime().getTime()));
             stmt.setString(4, ccnFile.getFilePath());
             stmt.setInt(5, ccnFile.getType());
+            stmt.setLong(6, ccnFile.getSize());
             stmt.executeUpdate();
         } catch (Exception e) {
             throw new DbException("saveCcnFile failed!,ccnFile="

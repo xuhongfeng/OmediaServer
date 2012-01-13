@@ -74,7 +74,7 @@ public class CcnController extends BaseController {
                 } else {
                     String fileName = item.getFieldName();
                     model.put("fileName", fileName);
-                    logger.info("file size = " + item.getSize());
+                    model.put("size", item.getSize());
                     try {
                         input = item.getInputStream();
                     } catch (IOException e) {
@@ -85,6 +85,7 @@ public class CcnController extends BaseController {
             }
             long accountId = Long.parseLong(model.get("accountId").toString());
             long token = Long.parseLong(model.get("token").toString());
+            Long size = (Long) model.get("size");
             Account account;
             try {
                 account = accountService.getAccount(accountId);
@@ -129,6 +130,7 @@ public class CcnController extends BaseController {
             ccnFile.setType(CcnFile.TYPE_PRIVATE);
             ccnFile.setTime(new Date());
             ccnFile.setFilePath(filePath);
+            ccnFile.setSize(size);
             ccnService.saveCcnFile(ccnFile);
             logger.info("save ccnFile:" + ccnFile);
             ccnUtils.ccnPutFile(ccnFile);
