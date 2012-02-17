@@ -85,17 +85,4 @@ public class MockAccountDao implements AccountDao {
         
     }
 
-    @Override
-    public void updateCcnFileVersion(long accountId, long ccnFileVersion)
-            throws DbException {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void updateCcnFileVersion(long ccnFileVersion) throws DbException {
-        // TODO Auto-generated method stub
-        
-    }
-
 }

@@ -218,40 +218,6 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         }
     }
     
-    public void updateCcnFileVersion(long accountId, long ccnFileVersion)
-            throws DbException {
-        String sql = "update account set ccnFileVersion=? where accountId=?";
-        Connection conn = null;
-        try {
-            conn = openConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setLong(1, ccnFileVersion);
-            stmt.setLong(2, accountId);
-            stmt.executeUpdate();
-        } catch (Exception e) {
-            throw new DbException("update account ccnFileVersion failed! accountId="
-                    + accountId, e);
-        } finally {
-            closeConnection(conn);
-        }
-    }
-    
-    public void updateCcnFileVersion(long ccnFileVersion)
-            throws DbException {
-        String sql = "update account set ccnFileVersion=?";
-        Connection conn = null;
-        try {
-            conn = openConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setLong(1, ccnFileVersion);
-            stmt.executeUpdate();
-        } catch (Exception e) {
-            throw new DbException("update account ccnFileVersion failed!", e);
-        } finally {
-            closeConnection(conn);
-        }
-    }
-
     public void updateFriendRequestVersion(long accountId,
             long friendRequestVersion) throws DbException {
         String sql = "update account set friendRequestVersion=? where accountId=?";

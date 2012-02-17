@@ -46,7 +46,7 @@ public class CommonsController extends BaseController {
             } else {
                 json.setFriends(1);
             }
-            if(account.getCcnFileVersion() == ccnFileVersion) {
+            if(CcnController.ccnFileVersion == ccnFileVersion) {
                 json.setCcnFile(0);
             } else {
                 json.setCcnFile(1);

@@ -30,7 +30,7 @@ import org.tsinghua.omedia.model.CcnFile;
 public class CcnController extends BaseController {
     private Logger logger = Logger.getLogger(CcnController.class);
     
-    private volatile long ccnFileVersion = 0L;
+    public static volatile long ccnFileVersion = 0L;
     
     @Value("${ccn.storage.path}")
     private String ccnStoragePath;
