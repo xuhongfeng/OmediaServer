@@ -18,7 +18,7 @@ function after_show_ccn_file(json) {
 			var name = file.ccnName;
 			var size = format_file_size(file.size);
 			var time = format_time(file.time);
-			var tr = "<tr><td><a href=\"www.baidu.com\">"+name
+			var tr = "<tr><td><a href=\"/omedia/download-file.do?path="+file.filePath+"\">"+name
 				+"</a></td><td>"+size
 				+"</td><td>"+time
 				+"</td></tr>";

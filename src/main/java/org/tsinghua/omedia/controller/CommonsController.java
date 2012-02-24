@@ -1,6 +1,13 @@
 package org.tsinghua.omedia.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -14,6 +21,9 @@ import org.tsinghua.omedia.utils.ConfigManager;
 public class CommonsController extends BaseController {
     private static final Logger logger = Logger.getLogger(CommonsController.class);
 
+    @Value("${apk.path}")
+    private String APK_PATH;
+    
     @RequestMapping(value="/checkDataVersion.do", method=RequestMethod.GET)
     @ResponseBody
     public String checkDataVersion(@RequestParam("accountId") long accountId,
@@ -77,6 +87,35 @@ public class CommonsController extends BaseController {
             logger.error("", e);
             return "{\"result\":-1}";
         }
+    }
+    
+    @RequestMapping(value="/download-omedia.do",method=RequestMethod.GET)
+    public void downloadOmedia(HttpServletResponse response) {
+    	try {
+    		File file =  new File(APK_PATH);
+    		response.setHeader( "Content-Disposition", "attachment;filename=" + 
+    				new String( file.getName().getBytes("gb2312"), "ISO8859-1" ) ); 
+			FileInputStream fis = new FileInputStream(file);
+			IOUtils.copy(fis, response.getOutputStream());
+			response.flushBuffer();
+		} catch (Exception e) {
+			logger.error("", e);
+		}
+    }
+    
+    @RequestMapping(value="/download-file.do",method=RequestMethod.GET)
+    public void downloadOmedia(@RequestParam("path") String path,
+    		HttpServletResponse response) {
+    	try {
+    		File file =  new File(path);
+    		response.setHeader( "Content-Disposition", "attachment;filename=" + 
+    				new String( file.getName().getBytes("gb2312"), "ISO8859-1" ) ); 
+			FileInputStream fis = new FileInputStream(file);
+			IOUtils.copy(fis, response.getOutputStream());
+			response.flushBuffer();
+		} catch (Exception e) {
+			logger.error("", e);
+		}
     }
 
     @SuppressWarnings("unused")
@@ -170,4 +209,5 @@ public class CommonsController extends BaseController {
         }
         
     }
+    
 }
