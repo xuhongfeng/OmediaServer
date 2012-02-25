@@ -21,7 +21,7 @@ function after_login(json) {
 	} else if(json.result==RESULT_CODE.SUCCESS) {
 		$.cookie('accountId', json.accountId, { expires: 30 });
 		$.cookie('token', json.token, { expires: 30 });
-		window.location.href = "/omedia/jsp/main.jsp";
+		window.location.href = "/omedia/html/main.html";
 	} else {
 		process_result(json);
 	}

@@ -4,7 +4,7 @@
     id="WebApp_ID" version="2.5">
     <display-name>omedia</display-name>
     <welcome-file-list>
-    	<welcome-file>jsp/login.jsp</welcome-file>
+    	<welcome-file>html/login.html</welcome-file>
     </welcome-file-list>
     <servlet>
         <servlet-name>dispatcher</servlet-name>
@@ -19,4 +19,15 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>
+   <!-- 
+   <filter>
+	<filter-name>echo-filter</filter-name>
+		<filter-class>org.tsinghua.omedia.filter.EchoFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>echo-filter</filter-name>
+		<url-pattern>*.do</url-pattern>
+	</filter-mapping>  
+	--> 
+  
 </web-app>

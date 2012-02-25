@@ -5,26 +5,16 @@ $(document).ready(function(){
 });
 
 function show_ccn_file(accountId, token) {
-	var url = "/omedia/showCcnFiles.do?accountId="+accountId
+	var url = "/omedia/showCcnFilesVm.do?accountId="+accountId
 		+"&token="+token;
-	$.getJSON(url, after_show_ccn_file);
+	$.ajax({
+  		url: url,
+  		success: after_show_ccn_file,
+  		contentType: "text/html; charset=utf-8"
+	});
 }
 
-function after_show_ccn_file(json) {
-	if(json.result==1) {
-		var ccn_files = json.ccnFiles;
-		for(var i=0; i<ccn_files.length; i++) {
-			var file = ccn_files[i];
-			var name = file.ccnName;
-			var size = format_file_size(file.size);
-			var time = format_time(file.time);
-			var tr = "<tr><td><a href=\"/omedia/download-file.do?path="+file.filePath+"\">"+name
-				+"</a></td><td>"+size
-				+"</td><td>"+time
-				+"</td></tr>";
-			$(tr).appendTo("table");
-		}
-	} else {
-		process_result(json)
-	}
+function after_show_ccn_file(vm) {
+	$("div#div_content").empty();
+	$("div#div_content").wrapInner(vm);
 }

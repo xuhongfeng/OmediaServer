@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.model.CcnFile;
 
@@ -42,7 +44,6 @@ public class CcnController extends BaseController {
     public String showCcnFiles(@RequestParam("accountId") long accountId,
             @RequestParam("token") long token) {
         logger.info("showPublicCcnFiles called, accountId="+accountId +",token=" + token);
-
         Account account;
         try {
             account = accountService.getAccount(accountId);
@@ -57,7 +58,29 @@ public class CcnController extends BaseController {
             return "{\"result\":-1}";
         }
     }
-
+    
+    @RequestMapping(value="/showCcnFilesVm.do", method=RequestMethod.GET)
+    public ModelAndView showCcnFiles(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token
+            ,ModelAndView mav, HttpServletResponse response) {
+        logger.info("showPublicCcnFilesVm called, accountId="+accountId +",token=" + token);
+        Account account;
+        try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+            	return errorMav("cookie out of date");
+            }
+            List<CcnFile> ccnFiles = ccnService.listCcnFiles(accountId);
+            mav.setViewName("ccn_file");
+            mav.addObject("files", ccnFiles);
+            response.setContentType("text/html;charset=UTF-8");
+            return mav;
+        } catch (IOException e) {
+            logger.error("showPublicCcnFiles failed", e);
+            return errorMav("server error");
+        }
+    }
+    
     @RequestMapping(value="/ccnPutFile.do", method=RequestMethod.POST)
     @ResponseBody
     public String ccnPutFile(HttpServletRequest request) {

@@ -5,6 +5,7 @@ import javax.annotation.PostConstruct;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.servlet.ModelAndView;
 import org.tsinghua.omedia.service.AccountService;
 import org.tsinghua.omedia.service.CcnService;
 import org.tsinghua.omedia.service.FriendService;
@@ -37,5 +38,11 @@ public class BaseController {
     private void init() {
         objectMapper.configure(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS,
                 false);
+    }
+
+	protected ModelAndView errorMav(String error) {
+		ModelAndView errorMav = new ModelAndView("error");
+		errorMav.addObject("error", error);
+		return errorMav;
     }
 }

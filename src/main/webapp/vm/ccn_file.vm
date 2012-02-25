@@ -1,0 +1,14 @@
+<table border=5>
+	<tr>
+		<th>文件</th>
+		<th>大小</th>
+		<th>上传时间</th>
+	</tr>
+	#foreach( $file in $files)
+		<tr>
+			<td>$file.ccnName</td>
+			<td>$file.size</td>
+			<td>$file.time.get('yyyy-M-d H:m:s')</td>
+		</tr>
+	#end
+</table>

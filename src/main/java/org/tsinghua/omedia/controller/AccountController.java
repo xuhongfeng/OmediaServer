@@ -121,7 +121,7 @@ public class AccountController extends BaseController {
             return "{\"result\":-1}";
         }
     }
-    
+
     private static class JsonLoginSuccess {
         private int result;
         private long accountId;
