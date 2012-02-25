@@ -33,7 +33,10 @@
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver"> 
 	    <property name="suffix"> 
 	      <value>.vm</value> 
-	    </property> 
+	    </property>
+	    <property name="dateToolAttribute">
+	    	<value>date</value>
+	    </property>
 	</bean> 
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"

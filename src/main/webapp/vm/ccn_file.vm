@@ -7,8 +7,8 @@
 	#foreach( $file in $files)
 		<tr>
 			<td>$file.ccnName</td>
-			<td>$file.size</td>
-			<td>$file.time.get('yyyy-M-d H:m:s')</td>
+			<td>$tool.size($file.size)</td>
+			<td>$date.format('yyyy-M-d H:m:s',$file.time)</td>
 		</tr>
 	#end
 </table>

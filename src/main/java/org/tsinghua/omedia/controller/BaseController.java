@@ -12,6 +12,7 @@ import org.tsinghua.omedia.service.FriendService;
 import org.tsinghua.omedia.utils.AccountUtils;
 import org.tsinghua.omedia.utils.CcnUtils;
 import org.tsinghua.omedia.utils.MD5Utils;
+import org.tsinghua.omedia.utils.VelocityTool;
 
 public class BaseController {
     
@@ -29,6 +30,8 @@ public class BaseController {
     protected MD5Utils md5Utils;
     @Autowired
     protected AccountUtils accountUtils;
+    @Autowired
+    protected VelocityTool velocityTool;
     
     public BaseController() {
     }

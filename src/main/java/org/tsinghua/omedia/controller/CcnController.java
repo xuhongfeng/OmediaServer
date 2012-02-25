@@ -73,6 +73,7 @@ public class CcnController extends BaseController {
             List<CcnFile> ccnFiles = ccnService.listCcnFiles(accountId);
             mav.setViewName("ccn_file");
             mav.addObject("files", ccnFiles);
+            mav.addObject("tool", velocityTool);
             response.setContentType("text/html;charset=UTF-8");
             return mav;
         } catch (IOException e) {
