@@ -6,45 +6,45 @@
     <link rel="stylesheet" href="/omedia/css/blueprint/screen.css" type="text/css" media="screen, projection" />  
     <link rel="stylesheet" href="/omedia/css/blueprint/print.css" type="text/css" media="print" />  
     <!--[if IE]><link rel="stylesheet" href="/omedia/css/blueprint/ie.css" type="text/css" media="screen, projection" /><![endif]-->  
-  
+    <link rel="stylesheet" href="/omedia/css/blueprint/plugins/fancy-type/screen.css" type="text/css" media="screen, projection" />  
+      	
   	<link type="text/css" href="/omedia/css/ui-lightness/jquery-ui-1.8.18.custom.css" rel="Stylesheet" />	
-<title>omedia</title>
+<title>登陆</title>
 </head>
 <body>
-<div class="container">
+	<div class="container">
 		<div class="span-24 last">
           <h1><img src="/omedia/icon/omedia-logo.png" width="50"/>Omedia</h1>
         </div>
-        <div class="prepend-2 span-6">
+        <div class="prepend-2 span-6 last">
           <h4>清华大学 omedia-ccn</h4>
         </div>
-        <div class="prepend-15 span-1 last">
-          <a href="/omedia">退出</a>
-        </div>
         <hr />
-		<div class="prepend-2 span-20 last" id="tabs">
-			<div id="tabs">
-	       		<ul>
-					<li><a href='#div-files'>我的文件夹</a></li>
-					<li><a href='#div-friends'>好友</a></li>
-					<li><a href='#div-settings'>设置</a></li>
-				</ul>
-				<div>
-	        <div id="div-files">
-			</div>
-	        <div id="div-friends">
-			</div>
-	        <div id="div-settings">
-			</div>
-        </div>
-
+        
+        <div class="prepend-4 span-6">
+	        <form>
+	        	<fieldset>
+	        	<legend>登陆</legend>
+	        	<label>用户名:</label></br>
+	        	<input id="username" class="text span-6"/></br>
+	        	<label>密码:</label></br>
+	        	<input class="text span-6" type="password" id="password"/></br>
+	        	<label>密码确认:</label></br>
+	        	<input class="text span-6" type="password" id="pwconfirm"/></br>
+	        	<label>邮箱:</label></br>
+	        	<input class="text span-6" type="email" id="password"/></br>
+	        	<input id="btn-ok" type="button" value="提交" class="span-2"/>
+	        	<input id="btn-cancel" type="button" value="返回" class="span-2"/>
+	        	</fieldset>
+	        </form>
+	    <div>
+	</div>
 	<script src="/omedia/js/lib/jquery.js"></script>
 	<script src="/omedia/js/lib/jquery_ui.js"></script>
 	<script src="/omedia/js/lib/jquery_cookie.js"></script>
 	<script src="/omedia/js/const.js"></script>
 	<script src="/omedia/js/utils.js"></script>
 	<script src="/omedia/js/common.js"></script>
-	<script src="/omedia/js/main.js"></script>
-</div>
+	<script src="/omedia/js/register.js"></script>
 </body>
 </html>

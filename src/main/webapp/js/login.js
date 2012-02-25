@@ -1,8 +1,13 @@
 $(document).ready(function(){
+	$("#btn-login").button();
+	$("#btn-register").button();
 	$("#btn-login").click(function(){
 		var username = $("#username").val();
 		var password = $("#password").val();
 		do_login(username, password);
+	});
+	$("#btn-register").click(function(){
+		window.location.href = "/omedia/html/register.html";
 	});
 });
 

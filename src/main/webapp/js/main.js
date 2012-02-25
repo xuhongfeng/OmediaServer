@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	$("#tabs").tabs();
 	var accountId = $.cookie("accountId");
 	var token = $.cookie("token");
 	show_ccn_file(accountId, token);
@@ -15,6 +16,6 @@ function show_ccn_file(accountId, token) {
 }
 
 function after_show_ccn_file(vm) {
-	$("div#div_content").empty();
-	$("div#div_content").wrapInner(vm);
+	$("div#div-files").empty();
+	$("div#div-files").wrapInner(vm);
 }
