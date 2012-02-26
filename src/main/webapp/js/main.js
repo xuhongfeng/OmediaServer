@@ -1,11 +1,12 @@
 $(document).ready(function(){
 	$("#tabs").tabs();
-	var accountId = $.cookie("accountId");
-	var token = $.cookie("token");
-	show_ccn_file(accountId, token);
+	show_ccn_file();
+	$("span#head_username").wrapInner(getCookie("username"));
 });
 
-function show_ccn_file(accountId, token) {
+function show_ccn_file() {
+	var accountId = getCookie("accountId");
+	var token = getCookie("token");
 	var url = "/omedia/showCcnFilesVm.do?accountId="+accountId
 		+"&token="+token;
 	$.ajax({

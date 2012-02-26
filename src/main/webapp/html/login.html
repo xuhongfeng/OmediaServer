@@ -22,15 +22,19 @@
         <hr />
         
         <div class="prepend-4 span-6">
-	        <form>
+	        <form id="form_login">
 	        	<fieldset>
 	        	<legend>登陆</legend>
-	        	<label>用户名:</label></br>
-	        	<input id="username" class="text span-6"/></br>
-	        	<label>密码:</label></br>
-	        	<input class="text span-6" type="password" id="password"/></br>
-	        	<input id="btn-login" type="button" value="登陆" class="span-2"/>
-	       		<input id="btn-register" type="button" value="注册" class="span-2"/>
+	        	<label class="span-2">用户名:</label>
+	        	<input id="username" name="username" class="text span-6 last"/>
+	        	<label class="span-2">密码:</label>
+	        	<input class="text span-6 last" type="password" id="password" name="password"/>
+	        	<input id="btn-login" type="submit" value="登陆" class="span-3"/>
+	       		<input id="btn-register" type="button" value="注册" class="span-3 last"/></br>
+	       		<div class="span-6 last">
+		       		<input id="cb_pw" type="checkbox"/>
+		       		<label>记住密码</label></br>
+	       		</div>
 	        	</fieldset>
 	        </form>
 	    <div>
@@ -40,7 +44,7 @@
 	</div>
 	<script src="/omedia/js/lib/jquery.js"></script>
 	<script src="/omedia/js/lib/jquery_ui.js"></script>
-	<script src="/omedia/js/lib/jquery_cookie.js"></script>
+	<script src="/omedia/js/lib/jquery_validate.js"></script>
 	<script src="/omedia/js/const.js"></script>
 	<script src="/omedia/js/utils.js"></script>
 	<script src="/omedia/js/common.js"></script>
