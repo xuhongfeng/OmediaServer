@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.model.FriendRequest;
 
@@ -161,22 +162,24 @@ public class FriendController extends BaseController {
     
 
     @RequestMapping(value="/socialGraph.do", method=RequestMethod.GET)
-    public String socialGraph(@RequestParam("accountId") long accountId,
-            @RequestParam("token") long token, Model model) {
+    public ModelAndView socialGraph(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token) {
         logger.info("socialGraph.do called,accountId="+accountId
                 +",token="+token);
         Account account;
         try {
             account = accountService.getAccount(accountId);
             if(account==null || account.getToken()!=token) {
-                return "tokenError.html";
+                return errorMav("token error");
             }
-            model.addAttribute("accountId", accountId);
-            model.addAttribute("token", token);
-            return "jsp/socialGraph.jsp";
+            ModelAndView mav = new ModelAndView();
+            mav.addObject("accountId", accountId);
+            mav.addObject("token", token);
+            mav.setViewName("socialGraph");
+            return mav;
         } catch (Exception e) {
             logger.error("get contacts failed", e);
-            return "serverError.html";
+            return errorMav("server error!");
         }
     }
     

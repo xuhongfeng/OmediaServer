@@ -6,3 +6,5 @@ db.username=root
 db.password=securitytnc
 mysql.driver=com.mysql.jdbc.Driver
 ccn.storage.path=/var/storage/ccn
+ccn.url=ccnx:/node1
+ccn.host=166.111.137.72
