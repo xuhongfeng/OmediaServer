@@ -16,4 +16,6 @@ public interface CcnService {
     public List<CcnFile> listCcnFiles(long accountId) throws IOException;
     
     public void dumpCcnFileToRepo() throws IOException;
+    
+    public void deleteCcnFile(long accountId, String ccnName) throws IOException;
 }

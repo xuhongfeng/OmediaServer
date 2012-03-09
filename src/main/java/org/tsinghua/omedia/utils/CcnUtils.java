@@ -33,8 +33,7 @@ public class CcnUtils {
     
     public void ccnPutFile(CcnFile ccnFile) throws IOException {
         logger.info("CcnUtils.ccnPutFile="+ccnFile);
-        String ccnUrl = ConfigManager.getConfig().getCcnUrl()
-                + File.separator + ccnFile.getCcnname();
+        String ccnUrl = ccnName2url(ccnFile.getCcnname());
         logger.info("ccnUrl="+ccnUrl);
         ccnrm(ccnUrl);
         String filePath = ccnFile.getFilePath();
@@ -83,5 +82,11 @@ public class CcnUtils {
         } catch (Exception e) {
             logger.error(e);
         }
+    }
+
+    public String ccnName2url(String ccnName) {
+        String ccnUrl = ConfigManager.getConfig().getCcnUrl() + File.separator
+                + ccnName;
+        return ccnUrl;
     }
 }

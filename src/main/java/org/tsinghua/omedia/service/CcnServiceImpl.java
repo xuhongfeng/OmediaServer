@@ -36,4 +36,12 @@ public class CcnServiceImpl extends BaseService implements CcnService {
             ccnUtils.ccnPutFile(e);
         }
     }
+
+    @Override
+    public void deleteCcnFile(long accountId, String ccnName)
+            throws IOException {
+        ccnDao.deleteCcnFile(accountId, ccnName);
+        String ccnUrl = ccnUtils.ccnName2url(ccnName);
+        ccnUtils.ccnrm(ccnUrl);
+    }
 }

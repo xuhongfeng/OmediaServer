@@ -16,4 +16,5 @@ public interface CcnDao {
     public List<CcnFile> listAllCcnFiles(long accountId) throws DbException;
     public List<CcnFile> listCcnFiles(int type) throws DbException;
     public void saveCcnFile(CcnFile ccnFile) throws DbException;
+    public void deleteCcnFile(long accountId, String ccnName) throws DbException;
 }

@@ -5,6 +5,11 @@ import java.util.List;
 import org.tsinghua.omedia.exception.DbException;
 import org.tsinghua.omedia.model.Account;
 
+/**
+ * 
+ * @author xuhongfeng
+ *
+ */
 public class MockAccountDao implements AccountDao {
     private List<Account> datas;
     

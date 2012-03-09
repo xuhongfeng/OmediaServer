@@ -170,6 +170,24 @@ public class CcnDaoImpl extends BaseDao implements CcnDao {
         }
     }
 
+    
+    @Override
+    public void deleteCcnFile(long accountId, String ccnName) throws DbException {
+        String sql = "delete from ccnFile where accountId=? and ccnName=?";
+        Connection conn = null;
+        try {
+            conn = openConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, accountId);
+            stmt.setString(2, ccnName);
+            stmt.execute();
+        } catch (Exception e) {
+            throw new DbException("delete ccnFile failed!,accountId="
+                    + accountId + ", ccnName="+ccnName, e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
 
     @Override
     public void saveCcnFile(CcnFile ccnFile) throws DbException {

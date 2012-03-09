@@ -174,6 +174,27 @@ public class CcnController extends BaseController {
         }
     }
 
+    @RequestMapping(value="/deleteCcnFile.do", method=RequestMethod.GET)
+    @ResponseBody
+    public String deleteCcnFile(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token,
+            @RequestParam("ccnName") String ccnName) {
+        logger.info("deleteCcnFile called, accountId="+accountId +",token=" + token
+                +", ccnName="+ccnName);
+        Account account;
+        try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+                return "{\"result\":3}";
+            }
+            ccnService.deleteCcnFile(accountId, ccnName);
+            return "{\"result\":1}";
+        } catch (IOException e) {
+            logger.error("deleteCcnFile failed", e);
+            return "{\"result\":-1}";
+        }
+    }
+
     @SuppressWarnings("unused")
     private static class JsonCcnFileArray {
         private int result = 1;
