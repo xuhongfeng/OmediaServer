@@ -91,31 +91,37 @@ public class CommonsController extends BaseController {
     
     @RequestMapping(value="/download-omedia.do",method=RequestMethod.GET)
     public void downloadOmedia(HttpServletResponse response) {
-    	try {
-    		File file =  new File(APK_PATH);
-    		response.setHeader( "Content-Disposition", "attachment;filename=" + 
-    				new String( file.getName().getBytes("gb2312"), "ISO8859-1" ) ); 
-			FileInputStream fis = new FileInputStream(file);
-			IOUtils.copy(fis, response.getOutputStream());
-			response.flushBuffer();
-		} catch (Exception e) {
-			logger.error("", e);
-		}
+        try {
+            File file = new File(APK_PATH);
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition",
+                    "attachment;filename="
+                            + new String(file.getName().getBytes("gb2312"),
+                                    "ISO8859-1"));
+            FileInputStream fis = new FileInputStream(file);
+            IOUtils.copy(fis, response.getOutputStream());
+            response.flushBuffer();
+        } catch (Exception e) {
+            logger.error("", e);
+        }
     }
-    
-    @RequestMapping(value="/download-file.do",method=RequestMethod.GET)
+
+    @RequestMapping(value = "/download-file.do", method = RequestMethod.GET)
     public void downloadOmedia(@RequestParam("path") String path,
-    		HttpServletResponse response) {
-    	try {
-    		File file =  new File(path);
-    		response.setHeader( "Content-Disposition", "attachment;filename=" + 
-    				new String( file.getName().getBytes("gb2312"), "ISO8859-1" ) ); 
-			FileInputStream fis = new FileInputStream(file);
-			IOUtils.copy(fis, response.getOutputStream());
-			response.flushBuffer();
-		} catch (Exception e) {
-			logger.error("", e);
-		}
+            HttpServletResponse response) {
+        try {
+            File file = new File(path);
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition",
+                    "attachment;filename="
+                            + new String(file.getName().getBytes("gb2312"),
+                                    "ISO8859-1"));
+            FileInputStream fis = new FileInputStream(file);
+            IOUtils.copy(fis, response.getOutputStream());
+            response.flushBuffer();
+        } catch (Exception e) {
+            logger.error("", e);
+        }
     }
 
     @SuppressWarnings("unused")
