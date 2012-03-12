@@ -76,8 +76,12 @@ public class AccountController extends BaseController {
             @RequestParam("realName") String realName,
             @RequestParam("phone") String phone,
             @RequestParam("address") String address) {
-        logger.debug("setting accountId="+accountId+",token="+token);
+        logger.info("setting accountId="+accountId+",token="+token);
         try {
+            Account dbAccount = accountService.getAccount(accountId);
+            if(dbAccount==null || dbAccount.getToken()!=token) {
+                return "{\"result\":3}";
+            }
             Account account = new Account();
             account.setAccountId(accountId);
             account.setAddress(new String(address.getBytes("ISO8859_1"),"utf8"));
@@ -85,13 +89,9 @@ public class AccountController extends BaseController {
             account.setPhone(new String(phone.getBytes("ISO8859_1"),"utf8"));
             account.setRealName(new String(realName.getBytes("ISO8859_1"),"utf8"));
             account.setToken(token);
-            Account dbAccount = accountService.getAccount(accountId);
             account.setUsername(dbAccount.getUsername());
             account.setVersion(System.currentTimeMillis());
             account.setPassword(dbAccount.getPassword());
-            if(dbAccount==null || dbAccount.getToken()!=account.getToken()) {
-                return "{\"result\":3}";
-            }
             if (!newPassword.equals("")) {
                 account.setPassword(accountUtils.encryptPassword(newPassword));
                 if(!dbAccount.getPassword().equals(accountUtils.encryptPassword(oldPassword))) {
