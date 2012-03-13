@@ -56,6 +56,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 account.setFriendsVersion(friendsVersion);
                 account.setFriendRequestVersion(friendRequestVersion);
             }
+            //logger.info("accountDao.getAccount() = " + account); 
             return account;
         } catch (Exception e) {
             throw new DbException("getAccountByUsername failed,username="
@@ -100,6 +101,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 account.setFriendsVersion(friendsVersion);
                 account.setFriendRequestVersion(friendRequestVersion);
             }
+            //logger.info("accountDao.getAccount() = " + account); 
             return account;
         } catch (Exception e) {
             throw new DbException("getAccountByUsername failed,accountId="
@@ -145,6 +147,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 account.setFriendsVersion(friendsVersion);
                 account.setFriendRequestVersion(friendRequestVersion);
             }
+            //logger.info("accountDao.getAccount() = " + account); 
             return account;
         } catch (Exception e) {
             throw new DbException("getAccountByNameAndPassword failed,username="
@@ -159,6 +162,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         String sql = "replace into account(accountId,username,password,email," +
                 "realName,address,phone,version,token,friendsVersion,friendRequestVersion)" +
                 " values(?,?,?,?,?,?,?,?,?,?,?)";
+        //logger.info("accountDao.saveAccount()" + account);
         Connection conn = null;
         try {
             conn = openConnection();

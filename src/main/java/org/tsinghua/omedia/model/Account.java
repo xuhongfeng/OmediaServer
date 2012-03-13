@@ -79,5 +79,13 @@ public class Account {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+    @Override
+    public String toString() {
+        return "Account [accountId=" + accountId + ", username=" + username
+                + ", password=" + password + ", email=" + email + ", address="
+                + address + ", phone=" + phone + ", realName=" + realName
+                + ", token=" + token + ", version=" + version
+                + ", friendsVersion=" + friendsVersion
+                + ", friendRequestVersion=" + friendRequestVersion + "]";
+    }
 }

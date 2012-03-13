@@ -76,7 +76,8 @@ public class AccountController extends BaseController {
             @RequestParam("realName") String realName,
             @RequestParam("phone") String phone,
             @RequestParam("address") String address) {
-        logger.info("setting accountId="+accountId+",token="+token);
+        logger.info("setting accountId="+accountId+",token="+token
+                +", realName=" + realName);
         try {
             Account dbAccount = accountService.getAccount(accountId);
             if(dbAccount==null || dbAccount.getToken()!=token) {
@@ -84,10 +85,10 @@ public class AccountController extends BaseController {
             }
             Account account = new Account();
             account.setAccountId(accountId);
-            account.setAddress(new String(address.getBytes("ISO8859_1"),"utf8"));
+            account.setAddress(address);
             account.setEmail(email);
-            account.setPhone(new String(phone.getBytes("ISO8859_1"),"utf8"));
-            account.setRealName(new String(realName.getBytes("ISO8859_1"),"utf8"));
+            account.setPhone(phone);
+            account.setRealName(realName);
             account.setToken(token);
             account.setUsername(dbAccount.getUsername());
             account.setVersion(System.currentTimeMillis());
@@ -115,7 +116,9 @@ public class AccountController extends BaseController {
             if(account==null || account.getToken()!=token) {
                 return "{\"result\":3}";
             }
-            return objectMapper.writeValueAsString(new JsonAccount(account));
+            String r = objectMapper.writeValueAsString(new JsonAccount(account));
+            logger.info("getAccount.do response="+r);
+            return r;
         } catch (Exception e) {
             logger.error("get account failed", e);
             return "{\"result\":-1}";
