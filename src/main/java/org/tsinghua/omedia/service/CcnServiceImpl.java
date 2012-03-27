@@ -26,7 +26,7 @@ public class CcnServiceImpl extends BaseService implements CcnService {
 
     @Override
     public List<CcnFile> listCcnFiles(long accountId) throws IOException {
-        return ccnDao.listAllCcnFiles(accountId);
+        return ccnDao.listPrivateCcnFiles(accountId);
     }
 
     @Override

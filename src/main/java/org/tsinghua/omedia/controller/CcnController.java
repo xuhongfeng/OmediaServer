@@ -39,6 +39,32 @@ public class CcnController extends BaseController {
     
     private static File tmpDir = new File(System.getProperty("java.io.tmpdir"));
 
+    @RequestMapping(value="/showFriendCcnFiles.do", method=RequestMethod.GET)
+    @ResponseBody
+    public String showFriendCcnFile(@RequestParam("accountId") long accountId,
+            @RequestParam("token") long token
+            ,@RequestParam("friendId") long friendId) {
+        logger.info("showFriendCcnFiles.do called, accountId="+accountId +",token=" + token
+                +",friendId="+friendId);
+        Account account;
+        try {
+            account = accountService.getAccount(accountId);
+            if(account==null || account.getToken()!=token) {
+                return "{\"result\":3}";
+            }
+            boolean isFriend = friendService.isFriend(accountId, friendId);
+            if(!isFriend) {
+                return "{\"result\":4}";
+            }
+            List<CcnFile> ccnFiles = ccnService.listCcnFiles(friendId);
+            JsonCcnFileArray json = new JsonCcnFileArray(ccnFileVersion, ccnFiles.toArray(new CcnFile[0]));
+            return objectMapper.writeValueAsString(json);
+        } catch (IOException e) {
+            logger.error("showFriendCcnFiles failed", e);
+            return "{\"result\":-1}";
+        }
+    }
+    
     @RequestMapping(value="/showCcnFiles.do", method=RequestMethod.GET)
     @ResponseBody
     public String showCcnFiles(@RequestParam("accountId") long accountId,
@@ -157,7 +183,7 @@ public class CcnController extends BaseController {
             CcnFile ccnFile = new CcnFile();
             ccnFile.setAccountId(account.getAccountId());
             ccnFile.setCcnname(ccnName);
-            ccnFile.setType(CcnFile.TYPE_PRIVATE);
+            ccnFile.setType(CcnFile.TYPE_PUBLIC);
             ccnFile.setTime(new Date());
             ccnFile.setFilePath(filePath);
             ccnFile.setSize(size);

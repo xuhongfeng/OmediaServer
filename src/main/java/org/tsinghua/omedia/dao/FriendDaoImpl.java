@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
 import org.tsinghua.omedia.exception.DbException;
 import org.tsinghua.omedia.model.FriendRequest;
@@ -19,6 +20,8 @@ import org.tsinghua.omedia.model.Friends;
  */
 @Component("friendDao")
 public class FriendDaoImpl extends BaseDao implements FriendDao {
+    
+    private Logger logger = Logger.getLogger(FriendDaoImpl.class);
 
     public List<Friends> getFriends(long accountId) throws DbException {
         String sql = "select friendId from friends"
@@ -48,6 +51,8 @@ public class FriendDaoImpl extends BaseDao implements FriendDao {
     public Friends getFriends(long accountId, long friendId) throws DbException {
         String sql = "select accountId from friends"
                 + " where accountId=? and friendId=?";
+//        logger.info("friendDao.getFriends(),accountId="+accountId
+//                +",friendId="+friendId);
         Connection conn = null;
         try {
             conn = openConnection();

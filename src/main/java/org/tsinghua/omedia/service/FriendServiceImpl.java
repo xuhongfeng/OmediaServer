@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.tsinghua.omedia.dao.AccountDao;
@@ -15,6 +16,8 @@ import org.tsinghua.omedia.model.Friends;
 
 @Component("friendService")
 public class FriendServiceImpl extends BaseService implements FriendService {
+    private Logger logger = Logger.getLogger(FriendServiceImpl.class);
+    
     @Autowired
     private AccountService accountService;
     
@@ -51,6 +54,7 @@ public class FriendServiceImpl extends BaseService implements FriendService {
     private boolean innerIsFriend(long id1, long id2)  throws IOException {
         Friends f1 = friendDao.getFriends(id1, id2);
         Friends f2 = friendDao.getFriends(id2, id1);
+//        logger.info("innerIsFriend, f1="+f1+",f2="+f2);
         if(f1==null && f2==null) {
             return false;
         }
@@ -86,7 +90,6 @@ public class FriendServiceImpl extends BaseService implements FriendService {
         }
         List<FriendRequest> friendRequests = friendDao.getFriendRequest(requesterId, friendId);
         if(friendRequests.size() != 0) {
-            //�Է��Ѿ����ҷ��͹��������
             for(FriendRequest e: friendRequests) {
                 e.setStatus(FriendRequest.STATUS_ACCEPT);
                 friendDao.saveFriendRequest(e);
