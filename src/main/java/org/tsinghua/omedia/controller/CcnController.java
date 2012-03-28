@@ -85,8 +85,8 @@ public class CcnController extends BaseController {
         }
     }
     
-    @RequestMapping(value="/showCcnFilesVm.do", method=RequestMethod.GET)
-    public ModelAndView showCcnFiles(@RequestParam("accountId") long accountId,
+    @RequestMapping(value="/showCcnFiles-vm.do", method=RequestMethod.GET)
+    public ModelAndView showCcnFiles_vm(@RequestParam("accountId") long accountId,
             @RequestParam("token") long token
             ,ModelAndView mav, HttpServletResponse response) {
         logger.info("showPublicCcnFilesVm called, accountId="+accountId +",token=" + token);

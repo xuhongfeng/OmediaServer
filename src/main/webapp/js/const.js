@@ -1,5 +1,3 @@
-OMEDIA_VERSION="0.4";
-
 RESULT_CODE = {
 	SUCCESS : 1,
 	LOGIN : {

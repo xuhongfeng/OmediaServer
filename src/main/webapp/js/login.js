@@ -2,7 +2,7 @@ $(document).ready(function(){
 	$("#btn-login").button();
 	$("#btn-register").button();
 	$("#btn-register").click(function(){
-		window.location.href = "/omedia/html/register.html";
+		window.location.href = "/omedia/register-vm.do";
 	});
 	$("form#form_login").validate({
 		rules:{
@@ -44,6 +44,7 @@ $(document).ready(function(){
 function do_login() {
 	var username = $("#username").val();
 	var password = $("#password").val();
+	var OMEDIA_VERSION = $("span#omedia_version").attr("value");
 	setCookie('username',username,7);
 	if($("#cb_pw")[0].checked) {
 		setCookie('password',password,7);

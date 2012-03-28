@@ -12,6 +12,7 @@
 <title>登陆</title>
 </head>
 <body>
+    <span id="omedia_version" type="hidden" value="$omediaVersion"></span>
 	<div class="container">
 		<div class="span-24 last">
           <h1><img src="/omedia/icon/omedia-logo.png" width="50"/>Omedia</h1>

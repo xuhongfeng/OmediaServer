@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import org.tsinghua.omedia.model.Account;
 import org.tsinghua.omedia.model.Config;
 import org.tsinghua.omedia.utils.ConfigManager;
@@ -23,6 +24,9 @@ public class CommonsController extends BaseController {
 
     @Value("${apk.path}")
     private String APK_PATH;
+
+    @Value("${omedia.version}")
+    private  String OMEDIA_VERSION;
     
     @RequestMapping(value="/checkDataVersion.do", method=RequestMethod.GET)
     @ResponseBody
@@ -124,6 +128,22 @@ public class CommonsController extends BaseController {
         }
     }
 
+    @RequestMapping(value = "/login-vm.do", method = RequestMethod.GET)
+    public ModelAndView login_vm(ModelAndView mav, HttpServletResponse response) {
+        mav.setViewName("login");
+        mav.addObject("omediaVersion", OMEDIA_VERSION);
+        response.setContentType("text/html;charset=UTF-8");
+        return mav;
+    }
+
+    @RequestMapping(value = "/register-vm.do", method = RequestMethod.GET)
+    public ModelAndView register_vm(ModelAndView mav, HttpServletResponse response) {
+        mav.setViewName("register");
+        mav.addObject("omediaVersion", OMEDIA_VERSION);
+        response.setContentType("text/html;charset=UTF-8");
+        return mav;
+    }
+
     @SuppressWarnings("unused")
     private static class JsonCheckDataVersion {
         private int account;//==1 means accountData need to update
@@ -215,5 +235,4 @@ public class CommonsController extends BaseController {
         }
         
     }
-    
 }

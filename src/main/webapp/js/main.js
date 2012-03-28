@@ -7,7 +7,7 @@ $(document).ready(function(){
 function show_ccn_file() {
 	var accountId = getCookie("accountId");
 	var token = getCookie("token");
-	var url = "/omedia/showCcnFilesVm.do?accountId="+accountId
+	var url = "/omedia/showCcnFiles-vm.do?accountId="+accountId
 		+"&token="+token;
 	$.ajax({
   		url: url,

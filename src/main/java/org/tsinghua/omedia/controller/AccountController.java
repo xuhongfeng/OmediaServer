@@ -17,7 +17,7 @@ public class AccountController extends BaseController {
     private static final Logger logger = Logger.getLogger(AccountController.class);
 
     @Value("${omedia.version}")
-    private  String Version;
+    private  String OMEDIA_VERSION;
     
     @RequestMapping(value="/register.do", method=RequestMethod.GET)
     @ResponseBody
@@ -27,7 +27,7 @@ public class AccountController extends BaseController {
             ,@RequestParam("omediaVersion") String omediaVersion) {
         logger.debug("register username="+username + ",password="+password + ",email=" + email);
         try {
-            if(!omediaVersion.equals(Version)) {
+            if(!omediaVersion.equals(OMEDIA_VERSION)) {
                 return "{\"result\":4}";
             }
             if(accountService.isUsernameExist(username)) {
@@ -48,7 +48,7 @@ public class AccountController extends BaseController {
             ,@RequestParam("omediaVersion") String omediaVersion) {
         logger.debug("login username="+username + ",password="+password );
         try {
-            if(!omediaVersion.equals(Version)) {
+            if(!omediaVersion.equals(OMEDIA_VERSION)) {
                 return "{\"result\":4}";
             }
             Account account = accountService.login(username, password);
