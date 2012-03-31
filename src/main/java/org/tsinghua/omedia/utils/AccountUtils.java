@@ -12,6 +12,9 @@ public class AccountUtils {
     @Autowired
     private MD5Utils md5Utils;
     
+    @Autowired
+    private IDUtils idUtils;
+    
     private Random random = new Random();
     
     public String encryptPassword(String password) throws IOException {
@@ -19,20 +22,11 @@ public class AccountUtils {
     }
     
     public void generateId(Account account) {
-        account.setAccountId(genId());
+        account.setAccountId(idUtils.genId());
     }
     
     public long generateToken() {
         return random.nextInt();
     }
     
-    private synchronized long genId () {
-        long id = System.currentTimeMillis();
-        try {
-            Thread.sleep(5L);
-        } catch (InterruptedException e) {
-            //ignore it
-        }
-        return id;
-    }
 }

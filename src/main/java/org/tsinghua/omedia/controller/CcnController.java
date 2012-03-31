@@ -46,6 +46,7 @@ public class CcnController extends BaseController {
             ,@RequestParam("friendId") long friendId) {
         logger.info("showFriendCcnFiles.do called, accountId="+accountId +",token=" + token
                 +",friendId="+friendId);
+        long startTime = System.currentTimeMillis();
         Account account;
         try {
             account = accountService.getAccount(accountId);
@@ -58,6 +59,7 @@ public class CcnController extends BaseController {
             }
             List<CcnFile> ccnFiles = ccnService.listCcnFiles(friendId);
             JsonCcnFileArray json = new JsonCcnFileArray(ccnFileVersion, ccnFiles.toArray(new CcnFile[0]));
+            logger.info("showFriendCcnFiles.do, time cost="+(System.currentTimeMillis()-startTime));
             return objectMapper.writeValueAsString(json);
         } catch (IOException e) {
             logger.error("showFriendCcnFiles failed", e);
@@ -70,6 +72,7 @@ public class CcnController extends BaseController {
     public String showCcnFiles(@RequestParam("accountId") long accountId,
             @RequestParam("token") long token) {
         logger.info("showPublicCcnFiles called, accountId="+accountId +",token=" + token);
+        long startTime = System.currentTimeMillis();
         Account account;
         try {
             account = accountService.getAccount(accountId);
@@ -78,6 +81,7 @@ public class CcnController extends BaseController {
             }
             List<CcnFile> ccnFiles = ccnService.listCcnFiles(accountId);
             JsonCcnFileArray json = new JsonCcnFileArray(ccnFileVersion, ccnFiles.toArray(new CcnFile[0]));
+            logger.info("showCcnFiles.do, time cost="+(System.currentTimeMillis()-startTime));
             return objectMapper.writeValueAsString(json);
         } catch (IOException e) {
             logger.error("showPublicCcnFiles failed", e);

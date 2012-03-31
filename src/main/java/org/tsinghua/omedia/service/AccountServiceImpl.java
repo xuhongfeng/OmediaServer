@@ -70,4 +70,15 @@ public class AccountServiceImpl extends BaseService implements AccountService {
     public void setAccountDao(AccountDao accountDao) {
         this.accountDao = accountDao;
     }
+
+    @Override
+    public String getName(long accountId) throws IOException {
+        Account account = accountDao.getAccount(accountId);
+        if(account.getRealName()!=null &&account.getRealName().trim().length()>0) {
+            return account.getRealName();
+        } else {
+            return account.getUsername();
+        }
+    }
+    
 }
