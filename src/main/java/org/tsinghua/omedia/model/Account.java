@@ -8,11 +8,18 @@ public class Account {
     private String address = "";
     private String phone = "";
     private String realName = "";
-    private long token = 0L;
-    private long version = 0L;
-    private long friendsVersion = 0L;
-    private long friendRequestVersion = 0L;
+    private long token = -1L;
+    private long version = -1L;
+    private long friendsVersion = -1L;
+    private long friendRequestVersion = -1L;
+    private long groupVersion = -1L;
     
+    public long getGroupVersion() {
+        return groupVersion;
+    }
+    public void setGroupVersion(long groupVersion) {
+        this.groupVersion = groupVersion;
+    }
     public long getFriendsVersion() {
         return friendsVersion;
     }
@@ -86,6 +93,9 @@ public class Account {
                 + address + ", phone=" + phone + ", realName=" + realName
                 + ", token=" + token + ", version=" + version
                 + ", friendsVersion=" + friendsVersion
-                + ", friendRequestVersion=" + friendRequestVersion + "]";
+                + ", friendRequestVersion=" + friendRequestVersion
+                + ", groupVersion=" + groupVersion + "]";
     }
+    
+    
 }

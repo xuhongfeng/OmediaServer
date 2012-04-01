@@ -20,4 +20,5 @@ public interface AccountDao {
     public void updateFriendsVersion(long accountId, long friendsVersion) throws DbException;
     public void updateFriendRequestVersion(long accountId, long friendRequestVersion) throws DbException;
     public List<Account> searchAccounts(String keyword) throws DbException;
+    public void updateGroupVersion(long accountId, long groupVersion) throws DbException;
 }

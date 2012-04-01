@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.tsinghua.omedia.dao.AccountDao;
 import org.tsinghua.omedia.dao.GroupDao;
 import org.tsinghua.omedia.model.Group;
 import org.tsinghua.omedia.model.GroupUser;
@@ -23,6 +24,8 @@ public class GroupServiceImpl extends BaseService implements GroupService {
     private IDUtils idUtils;
     @Autowired
     private GroupDao groupDao;
+    @Autowired
+    private AccountDao accountDao;
     
     @Override
     public void createGroup(long accountId, String name) throws IOException {
@@ -38,6 +41,8 @@ public class GroupServiceImpl extends BaseService implements GroupService {
         gu.setAccountId(accountId);
         gu.setGroupId(group.getGroupId());
         groupDao.saveGroupUser(gu);
+        
+        accountDao.updateGroupVersion(accountId, System.currentTimeMillis());
     }
 
     @Override

@@ -65,7 +65,7 @@ public class GroupController extends BaseController {
                 JsonGroup json = new JsonGroup(group, creatorName);
                 jsonList.add(json);
             }
-            JsonGroupArray groupArray = new JsonGroupArray(jsonList);
+            JsonGroupArray groupArray = new JsonGroupArray(jsonList, account.getGroupVersion());
             return objectMapper.writeValueAsString(groupArray);
         } catch (Exception e) {
             logger.error("getGroup.do failed", e);
@@ -95,10 +95,12 @@ public class GroupController extends BaseController {
     @SuppressWarnings("unused")
     private static class JsonGroupArray {
         private int result = 1;
+        private long version;
         private JsonGroup[] groups;
         
-        public JsonGroupArray(List<JsonGroup> groups) {
+        public JsonGroupArray(List<JsonGroup> groups, long version) {
             this.groups = groups.toArray(new JsonGroup[0]);
+            this.version = version;
         }
     }
 }

@@ -36,7 +36,8 @@ public class CommonsController extends BaseController {
             @RequestParam("friendRequestVersion") long friendRequestVersion,
             @RequestParam("friendsVersion") long friendsVersion,
             @RequestParam("ccnFileVersion") long ccnFileVersion,
-            @RequestParam("configVersion") long configVersion) {
+            @RequestParam("configVersion") long configVersion,
+            @RequestParam("groupVersion") long groupVersion) {
         Account account;
         try {
             account = accountService.getAccount(accountId);
@@ -69,6 +70,11 @@ public class CommonsController extends BaseController {
                 json.setConfig(0);
             } else {
                 json.setConfig(1);
+            }
+            if(account.getGroupVersion()==groupVersion) {
+                json.group=0;
+            } else {
+                json.group=1;
             }
             return objectMapper.writeValueAsString(json);
         } catch (Exception e) {
@@ -152,6 +158,7 @@ public class CommonsController extends BaseController {
         private int config;
         private int ccnFile;
         private int result;
+        private int group;
 
         public int getFriends() {
             return friends;

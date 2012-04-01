@@ -23,7 +23,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
 
     public Account getAccount(String username) throws DbException {
         String sql = "select accountId,password,email,realName,address,phone," +
-                "version,token,friendsVersion,friendRequestVersion" +
+                "version,token,friendsVersion,friendRequestVersion,groupVersion" +
                 " from account where username=?";
         Connection conn = null;
         try {
@@ -44,6 +44,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 long token = rs.getLong(8);
                 long friendsVersion = rs.getLong(9);
                 long friendRequestVersion = rs.getLong(10);
+                long groupVersion = rs.getLong(11);
                 account.setEmail(email);
                 account.setAccountId(id);
                 account.setPassword(password);
@@ -55,6 +56,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 account.setToken(token);
                 account.setFriendsVersion(friendsVersion);
                 account.setFriendRequestVersion(friendRequestVersion);
+                account.setGroupVersion(groupVersion);
             }
             //logger.info("accountDao.getAccount() = " + account); 
             return account;
@@ -68,7 +70,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
     
     public Account getAccount(long accountId) throws DbException {
         String sql = "select username,password,email,realName,address,phone," +
-                "version,token,friendsVersion,friendRequestVersion" +
+                "version,token,friendsVersion,friendRequestVersion,groupVersion" +
                 " from account where accountId=?";
         Connection conn = null;
         try {
@@ -89,6 +91,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 long token = rs.getLong(8);
                 long friendsVersion = rs.getLong(9);
                 long friendRequestVersion = rs.getLong(10);
+                long groupVersion = rs.getLong(11);
                 account.setEmail(email);
                 account.setAccountId(accountId);
                 account.setPassword(password);
@@ -100,6 +103,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 account.setToken(token);
                 account.setFriendsVersion(friendsVersion);
                 account.setFriendRequestVersion(friendRequestVersion);
+                account.setGroupVersion(groupVersion);
             }
             //logger.info("accountDao.getAccount() = " + account); 
             return account;
@@ -114,7 +118,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
     public Account getAccount(String username, String password)
             throws DbException {
         String sql = "select accountId,email,realName,address,phone," +
-                "version,token,friendsVersion,friendRequestVersion" +
+                "version,token,friendsVersion,friendRequestVersion,groupVersion" +
                 " from account where username=? and password=?";
         Connection conn = null;
         try {
@@ -135,6 +139,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 long token = rs.getLong(7);
                 long friendsVersion = rs.getLong(8);
                 long friendRequestVersion = rs.getLong(9);
+                long groupVersion = rs.getLong(10);
                 account.setEmail(email);
                 account.setAccountId(id);
                 account.setPassword(password);
@@ -146,6 +151,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
                 account.setToken(token);
                 account.setFriendsVersion(friendsVersion);
                 account.setFriendRequestVersion(friendRequestVersion);
+                account.setGroupVersion(groupVersion);
             }
             //logger.info("accountDao.getAccount() = " + account); 
             return account;
@@ -160,8 +166,9 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
 
     public void saveAccount(Account account) throws DbException {
         String sql = "replace into account(accountId,username,password,email," +
-                "realName,address,phone,version,token,friendsVersion,friendRequestVersion)" +
-                " values(?,?,?,?,?,?,?,?,?,?,?)";
+                "realName,address,phone,version,token,friendsVersion" +
+                ",friendRequestVersion,groupVersion)" +
+                " values(?,?,?,?,?,?,?,?,?,?,?,?)";
         //logger.info("accountDao.saveAccount()" + account);
         Connection conn = null;
         try {
@@ -178,6 +185,7 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
             stmt.setLong(9, account.getToken());
             stmt.setLong(10, account.getFriendsVersion());
             stmt.setLong(11, account.getFriendRequestVersion());
+            stmt.setLong(12, account.getGroupVersion());
             stmt.executeUpdate();
         } catch (Exception e) {
             throw new DbException("add account failed! account="
@@ -204,40 +212,13 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
         }
     }
     
-    public void updateFriendsVersion(long accountId, long friendsVersion)
-            throws DbException {
-        String sql = "update account set friendsVersion=? where accountId=?";
-        Connection conn = null;
-        try {
-            conn = openConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setLong(1, friendsVersion);
-            stmt.setLong(2, accountId);
-            stmt.executeUpdate();
-        } catch (Exception e) {
-            throw new DbException("update account friendsVersion failed! accountId="
-                    + accountId, e);
-        } finally {
-            closeConnection(conn);
-        }
+    public void updateFriendsVersion(long accountId, long friendsVersion) throws DbException {
+        innerUpdateVersion(accountId, "friendsVersion", friendsVersion);
     }
     
     public void updateFriendRequestVersion(long accountId,
             long friendRequestVersion) throws DbException {
-        String sql = "update account set friendRequestVersion=? where accountId=?";
-        Connection conn = null;
-        try {
-            conn = openConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setLong(1, friendRequestVersion);
-            stmt.setLong(2, accountId);
-            stmt.executeUpdate();
-        } catch (Exception e) {
-            throw new DbException("update account friendRequestVersion failed! accountId="
-                    + accountId, e);
-        } finally {
-            closeConnection(conn);
-        }
+        innerUpdateVersion(accountId, "friendRequestVersion", friendRequestVersion);
     }
 
     public List<Account> searchAccounts(String keyword) throws DbException {
@@ -306,5 +287,28 @@ public class AccountDaoImpl extends BaseDao implements AccountDao {
             closeConnection(conn);
         }
     }
+
+    @Override
+    public void updateGroupVersion(long accountId, long groupVersion)
+            throws DbException {
+        innerUpdateVersion(accountId, "groupVersion", groupVersion);
+    }
     
+    private void innerUpdateVersion(long accountId, String column, long version)
+        throws DbException {
+        String sql = "update account set " + column + " =? where accountId=?";
+        Connection conn = null;
+        try {
+            conn = openConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setLong(1, version);
+            stmt.setLong(2, accountId);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            throw new DbException("innerUpdateVersion failed! column="+column
+                    +",accountId="+ accountId, e);
+        } finally {
+            closeConnection(conn);
+        }
+    }
 }
