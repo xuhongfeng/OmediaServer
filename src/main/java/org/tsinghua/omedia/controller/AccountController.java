@@ -46,7 +46,7 @@ public class AccountController extends BaseController {
     public String login(@RequestParam("username") String username
             ,@RequestParam("password") String password
             ,@RequestParam("omediaVersion") String omediaVersion) {
-        logger.debug("login username="+username + ",password="+password );
+        logger.info("login username="+username + ",password="+password +",omediaVersion="+omediaVersion);
         try {
             if(!omediaVersion.equals(OMEDIA_VERSION)) {
                 return "{\"result\":4}";

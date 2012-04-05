@@ -76,7 +76,9 @@ public class CommonsController extends BaseController {
             } else {
                 json.group=1;
             }
-            return objectMapper.writeValueAsString(json);
+            String jsonStr =  objectMapper.writeValueAsString(json);
+            logger.info("checkDataVersion return "+jsonStr);
+            return jsonStr;
         } catch (Exception e) {
             logger.error("check data version failed", e);
             return "{\"result\":-1}";
@@ -159,6 +161,16 @@ public class CommonsController extends BaseController {
         private int ccnFile;
         private int result;
         private int group;
+
+        public int getGroup() {
+            return group;
+        }
+
+
+        public void setGroup(int group) {
+            this.group = group;
+        }
+
 
         public int getFriends() {
             return friends;

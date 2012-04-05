@@ -90,4 +90,11 @@ public class MockAccountDao implements AccountDao {
         
     }
 
+    @Override
+    public void updateGroupVersion(long accountId, long groupVersion)
+            throws DbException {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
